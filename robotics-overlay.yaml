@@ -1,0 +1,45 @@
+---
+applications:
+  foxglove-studio:
+    charm: foxglove-studio-k8s
+    series: jammy
+    channel: edge
+    resources:
+      foxglove-studio-image: ghcr.io/foxglove/studio:latest
+    scale: 1
+    options:
+      server-port: 8080
+    constraints: arch=amd64
+  ros2bag-fileserver:
+    charm: ros2bag-fileserver-k8s
+    series: jammy
+    channel: edge
+    resources:
+      caddy-fileserver-image: docker.io/caddy/caddy:2.5.2-alpine
+    scale: 1
+    constraints: arch=amd64
+    storage:
+      database: 10G
+    options:
+      ssh-port: 2222
+  cos-registration-server:
+    charm: cos-registration-server-k8s
+    series: jammy
+    channel: edge
+    resources:
+      ubuntu22: ghcr.io/ubuntu-robotics/cos-registration-server:dev
+    scale: 1
+    constraints: arch=amd64
+    storage:
+      database: 1G
+
+relations:
+  - [foxglove-studio:ingress, traefik:traefik-route]
+  - [foxglove-studio:catalogue, catalogue:catalogue]
+  - [ros2bag-fileserver:ingress-tcp, traefik:ingress-per-unit]
+  - [ros2bag-fileserver:ingress-http, traefik:ingress]
+  - [ros2bag-fileserver:catalogue, catalogue:catalogue]
+  - [cos-registration-server:ingress, traefik:traefik-route]
+  - [cos-registration-server:catalogue, catalogue:catalogue]
+  - [cos-registration-server:auth-devices-keys,  ros2bag-fileserver:auth-devices-keys]
+  - [grafana:grafana-dashboard, cos-registration-server:grafana-dashboard]
