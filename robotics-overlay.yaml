@@ -5,7 +5,7 @@ applications:
     series: jammy
     channel: edge
     resources:
-      foxglove-studio-image: ghcr.io/foxglove/studio:latest
+      foxglove-studio-image: ghcr.io/ubuntu-robotics/foxglove-studio:dev
     scale: 1
     options:
       server-port: 8080
