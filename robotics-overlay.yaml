@@ -32,7 +32,23 @@ applications:
     constraints: arch=amd64
     storage:
       database: 1G
-
+  blackbox:
+    charm: ./blackbox-exporter-k8s-operator/blackbox-exporter-k8s_ubuntu-22.04-amd64.charm
+    resources:
+      blackbox-exporter-image: quay.io/prometheus/blackbox-exporter:v0.24.0
+    scale: 1
+    constraints: arch=amd64
+  cos-configuration:
+    charm: cos-configuration-k8s
+    scale: 1
+    channel: latest/stable
+    trust: true
+    options:
+      git_branch: feat/blackbox-grafana-dashboard
+      git_depth: 1
+      git_repo: https://github.com/ubuntu-robotics/robotics-cos-k8s-config.git
+      grafana_dashboards_path: grafana_dashboards_path=dashboards/grafana/blackbox
+    constraints: arch=amd64
 relations:
   - [foxglove-studio:ingress, traefik:traefik-route]
   - [foxglove-studio:catalogue, catalogue:catalogue]
@@ -42,4 +58,11 @@ relations:
   - [cos-registration-server:ingress, traefik:traefik-route]
   - [cos-registration-server:catalogue, catalogue:catalogue]
   - [cos-registration-server:auth-devices-keys,  ros2bag-fileserver:auth-devices-keys]
+  - [cos-registration-server:blackbox-probes,   blackbox:blackbox-probe]
   - [grafana:grafana-dashboard, cos-registration-server:grafana-dashboard]
+  - [blackbox:grafana-dashboard, grafana:grafana-dashboard]
+  - [blackbox:self-metrics-endpoint, prometheus:metrics-endpoint]
+  - [blackbox:ingress, traefik:ingress]
+  - [blackbox:catalogue, catalogue:catalogue]
+  - [blackbox:catalogue_grafana, catalogue:catalogue]
+  - [cos-configuration:grafana-dashboards, grafana:grafana-dashboard]
