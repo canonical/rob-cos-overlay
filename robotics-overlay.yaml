@@ -10,10 +10,8 @@ applications:
     options:
       server-port: 8080
     constraints: arch=amd64
-  ros2bag-fileserver:
-    charm: ros2bag-fileserver-k8s
-    series: jammy
-    channel: edge
+  ros2bag-fileserver-k8s:
+    charm: ./ros2bag-fileserver-k8s_ubuntu-22.04-amd64.charm
     resources:
       caddy-fileserver-image: ghcr.io/ubuntu-robotics/ros2bag-fileserver:dev
     scale: 1
@@ -22,18 +20,16 @@ applications:
       database: 10G
     options:
       ssh-port: 2222
-  cos-registration-server:
-    charm: cos-registration-server-k8s
-    series: jammy
-    channel: beta
+  cos-registration-server-k8s:
+    charm: ./cos-registration-server-k8s_ubuntu-22.04-amd64.charm
     resources:
       ubuntu22: ghcr.io/ubuntu-robotics/cos-registration-server:dev
     scale: 1
     constraints: arch=amd64
     storage:
       database: 1G
-  blackbox:
-    charm: ./blackbox-exporter-k8s-operator/blackbox-exporter-k8s_ubuntu-22.04-amd64.charm
+  blackbox-exporter-k8s:
+    charm: ./blackbox-exporter-k8s_ubuntu-22.04-amd64.charm
     resources:
       blackbox-exporter-image: quay.io/prometheus/blackbox-exporter:v0.24.0
     scale: 1
@@ -47,22 +43,21 @@ applications:
       git_branch: feat/blackbox-grafana-dashboard
       git_depth: 1
       git_repo: https://github.com/ubuntu-robotics/robotics-cos-k8s-config.git
-      grafana_dashboards_path: grafana_dashboards_path=dashboards/grafana/blackbox
+      grafana_dashboards_path: dashboards/grafana/blackbox
     constraints: arch=amd64
 relations:
   - [foxglove-studio:ingress, traefik:traefik-route]
   - [foxglove-studio:catalogue, catalogue:catalogue]
-  - [ros2bag-fileserver:ingress-tcp, traefik:ingress-per-unit]
-  - [ros2bag-fileserver:ingress-http, traefik:ingress]
-  - [ros2bag-fileserver:catalogue, catalogue:catalogue]
-  - [cos-registration-server:ingress, traefik:traefik-route]
-  - [cos-registration-server:catalogue, catalogue:catalogue]
-  - [cos-registration-server:auth-devices-keys,  ros2bag-fileserver:auth-devices-keys]
-  - [cos-registration-server:blackbox-probes,   blackbox:blackbox-probe]
-  - [grafana:grafana-dashboard, cos-registration-server:grafana-dashboard]
-  - [blackbox:grafana-dashboard, grafana:grafana-dashboard]
-  - [blackbox:self-metrics-endpoint, prometheus:metrics-endpoint]
-  - [blackbox:ingress, traefik:ingress]
-  - [blackbox:catalogue, catalogue:catalogue]
-  - [blackbox:catalogue_grafana, catalogue:catalogue]
+  - [ros2bag-fileserver-k8s:ingress-tcp, traefik:ingress-per-unit]
+  - [ros2bag-fileserver-k8s:ingress-http, traefik:ingress]
+  - [ros2bag-fileserver-k8s:catalogue, catalogue:catalogue]
+  - [ros2bag-fileserver-k8s:blackbox-probes, blackbox-exporter-k8s:blackbox-probes]
+  - [cos-registration-server-k8s:ingress, traefik:traefik-route]
+  - [cos-registration-server-k8s:catalogue, catalogue:catalogue]
+  - [cos-registration-server-k8s:auth-devices-keys, ros2bag-fileserver-k8s:auth-devices-keys]
+  - [cos-registration-server-k8s:blackbox-probes, blackbox-exporter-k8s:blackbox-probes]
+  - [grafana:grafana-dashboard, cos-registration-server-k8s:grafana-dashboard]
+  - [blackbox-exporter-k8s:self-metrics-endpoint, prometheus:metrics-endpoint]
+  - [blackbox-exporter-k8s:ingress, traefik:ingress]
+  - [blackbox-exporter-k8s:catalogue, catalogue:catalogue]
   - [cos-configuration:grafana-dashboards, grafana:grafana-dashboard]
