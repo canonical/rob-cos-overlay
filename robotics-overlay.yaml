@@ -1,4 +1,4 @@
----
+--
 applications:
   foxglove-studio-k8s:
     charm: ./foxglove-studio-k8s_ubuntu-22.04-amd64.charm
@@ -31,6 +31,8 @@ applications:
     resources:
       blackbox-exporter-image: quay.io/prometheus/blackbox-exporter:v0.24.0
     scale: 1
+    options:
+      grafana_dashboard_uid: ab09rj0r
     constraints: arch=amd64
   cos-configuration:
     charm: cos-configuration-k8s
@@ -44,6 +46,7 @@ applications:
       grafana_dashboards_path: dashboards/grafana/blackbox
     constraints: arch=amd64
 relations:
+  - [blackbox-exporter-k8s:ingress, traefik:ingress]
   - [foxglove-studio-k8s:ingress, traefik:traefik-route]
   - [foxglove-studio-k8s:catalogue, catalogue:catalogue]
   - [foxglove-studio-k8s:blackbox-probes, blackbox-exporter-k8s:blackbox-probes]
@@ -57,6 +60,6 @@ relations:
   - [cos-registration-server-k8s:blackbox-probes, blackbox-exporter-k8s:blackbox-probes]
   - [grafana:grafana-dashboard, cos-registration-server-k8s:grafana-dashboard]
   - [blackbox-exporter-k8s:self-metrics-endpoint, prometheus:metrics-endpoint]
-  - [blackbox-exporter-k8s:ingress, traefik:ingress]
   - [blackbox-exporter-k8s:catalogue, catalogue:catalogue]
+  - [blackbox-exporter-k8s:catalogue_grafana, catalogue:catalogue]
   - [cos-configuration:grafana-dashboards, grafana:grafana-dashboard]
