@@ -1,9 +1,7 @@
 ---
 applications:
-  foxglove-studio:
-    charm: foxglove-studio-k8s
-    series: jammy
-    channel: edge
+  foxglove-studio-k8s:
+    charm: ./foxglove-studio-k8s_ubuntu-22.04-amd64.charm
     resources:
       foxglove-studio-image: ghcr.io/ubuntu-robotics/foxglove-studio:dev
     scale: 1
@@ -46,8 +44,9 @@ applications:
       grafana_dashboards_path: dashboards/grafana/blackbox
     constraints: arch=amd64
 relations:
-  - [foxglove-studio:ingress, traefik:traefik-route]
-  - [foxglove-studio:catalogue, catalogue:catalogue]
+  - [foxglove-studio-k8s:ingress, traefik:traefik-route]
+  - [foxglove-studio-k8s:catalogue, catalogue:catalogue]
+  - [foxglove-studio-k8s:blackbox-probes, blackbox-exporter-k8s:blackbox-probes]
   - [ros2bag-fileserver-k8s:ingress-tcp, traefik:ingress-per-unit]
   - [ros2bag-fileserver-k8s:ingress-http, traefik:ingress]
   - [ros2bag-fileserver-k8s:catalogue, catalogue:catalogue]
