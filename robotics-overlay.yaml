@@ -27,7 +27,7 @@ applications:
     series: jammy
     channel: beta
     resources:
-      ubuntu22: ghcr.io/ubuntu-robotics/cos-registration-server:dev
+      cos-registration-server-image: ghcr.io/ubuntu-robotics/cos-registration-server:dev
     scale: 1
     constraints: arch=amd64
     storage:
