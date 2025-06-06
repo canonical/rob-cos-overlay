@@ -23,4 +23,43 @@ terraform apply -var="model=<MODEL_NAME>"
 ```
 
 <!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 1.5 |
+| juju | ~> 0.19.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| juju | ~> 0.19.0 |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [juju_application.microceph](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
+| [juju_model.model](https://registry.terraform.io/providers/juju/juju/latest/docs/data-sources/model) | data source |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| model | Model name (must be a machine model) | `string` | n/a | yes |
+| app\_name | Application name | `string` | `"microceph"` | no |
+| channel | Charm channel | `string` | `"squid/stable"` | no |
+| config | Config options as in the ones we pass in juju config | `map(string)` | `{}` | no |
+| constraints | Constraints to be applied | `string` | `""` | no |
+| revision | Charm revision | `number` | `null` | no |
+| units | Number of units | `number` | `1` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| app\_name | The name of the deployed application |
+| provides | The integration endpoints provided by the application |
+| requires | The integration endpoints required by the application |
 <!-- END_TF_DOCS -->
