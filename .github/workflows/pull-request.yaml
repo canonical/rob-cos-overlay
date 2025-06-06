@@ -1,0 +1,27 @@
+name: Pull Requests
+
+on:
+  pull_request:
+    paths-ignore:
+      - '.gitignore'
+      - 'LICENSE'
+      - '*.md'
+      - '*.yaml'
+    branches:
+      - main
+
+jobs:
+  terraform-docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Render terraform docs and push changes back to PR
+      uses: terraform-docs/gh-actions@main
+      with:
+        working-dir: terraform/dev/rob-cos,terraform/modules/microceph,terraform/modules/rob-cos-overlay
+        output-file: README.md
+        output-method: inject
+        git-push: "true"
