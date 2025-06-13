@@ -1,7 +1,7 @@
 # Terraform module for `rob-cos`
 
 This is a Terraform module facilitating the deployment of the COS for Devices project,
-using the [Terraform juju provider](https://github.com/juju/terraform-provider-juju/).
+using the [Terraform Juju provider](https://github.com/juju/terraform-provider-juju/).
 For more information,
 refer to the provider [documentation](https://registry.terraform.io/providers/juju/juju/latest/docs).
 
@@ -11,7 +11,7 @@ refer to the provider [documentation](https://registry.terraform.io/providers/ju
 
 ## Requirements
 
-This module requires both a Juju machine model as well as a Juju k8s model to be available.
+This module requires both a Juju machine model as well as a Juju K8s model to be available.
 Refer to the [usage section](#usage) below for more details.
 
 ## Usage
