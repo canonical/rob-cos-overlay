@@ -18,10 +18,10 @@ module "cos_lite" {
 }
 
 module "robcos_overlay" {
-  source = "../../modules/robcos_overlay"
-  model  = data.juju_model.robcos_model.name
+  source                  = "../../modules/robcos_overlay"
+  model                   = data.juju_model.robcos_model.name
   cos_registration_server = var.cos_registration_server
-  foxglove_studio = var.foxglove_studio
+  foxglove_studio         = var.foxglove_studio
 }
 
 module "microceph" {

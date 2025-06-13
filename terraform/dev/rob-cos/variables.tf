@@ -13,7 +13,7 @@ variable "cos_lite" {
     channel = optional(string, "latest/edge")
     use_tls = optional(bool, false)
   })
-  default = {}
+  default     = {}
   description = <<-EOT
   The cos-lite variables.
   Please refer to the module for more information.
@@ -25,7 +25,7 @@ variable "cos_registration_server" {
     channel  = optional(string, "latest/edge")
     revision = optional(number, null)
   })
-  default = {}
+  default     = {}
   description = <<-EOT
   The cos-registration-server variables.
   Please refer to the module for more information.
@@ -37,7 +37,7 @@ variable "foxglove_studio" {
     channel  = optional(string, "latest/edge")
     revision = optional(number, null)
   })
-  default = {}
+  default     = {}
   description = <<-EOT
   The foxglove-studio variables.
   Please refer to the module for more information.
@@ -50,7 +50,7 @@ variable "microceph" {
     revision = optional(number, null)
     units    = optional(number, 3)
   })
-  default = {}
+  default     = {}
   description = <<-EOT
   The microceph variables.
   Please refer to the module for more information.
