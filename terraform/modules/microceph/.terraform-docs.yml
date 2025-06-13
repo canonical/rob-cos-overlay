@@ -33,13 +33,13 @@ sort:
   by: required
 
 settings:
-  anchor: false #true
-  # color: true
+  anchor: false
+  color: true
   default: true
-  # description: false
+  description: false
   escape: true
   hide-empty: true
-  html: false #true
+  html: false
   indent: 2
   lockfile: false
   read-comments: true
