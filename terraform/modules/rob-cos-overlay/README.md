@@ -2,13 +2,13 @@
 
 This is a Terraform module facilitating the deployment of the COS for devices charms
 on top of [COS-lite](https://github.com/canonical/observability/blob/main/terraform/modules/cos-lite),
-using the [Terraform juju provider](https://github.com/juju/terraform-provider-juju/).
+using the [Terraform Juju provider](https://github.com/juju/terraform-provider-juju/).
 For more information,
 refer to the provider [documentation](https://registry.terraform.io/providers/juju/juju/latest/docs).
 
 ## Requirements
 
-This module requires a Juju k8s model to be available.
+This module requires a Juju K8s model to be available.
 Refer to the [usage section](#usage) below for more details.
 
 ## Usage
