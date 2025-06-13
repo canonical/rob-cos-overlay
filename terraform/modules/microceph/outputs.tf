@@ -1,5 +1,5 @@
 output "app_name" {
-  value = juju_application.microceph.name
+  value       = juju_application.microceph.name
   description = "The name of the deployed application"
 }
 
