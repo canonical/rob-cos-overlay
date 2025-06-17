@@ -1,5 +1,5 @@
 variable "model" {
-  description = "Model name (must be a k8s model)"
+  description = "Name of the model to deploy to (must be a K8s model)"
   type        = string
 }
 

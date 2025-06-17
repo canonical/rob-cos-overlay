@@ -1,10 +1,10 @@
 variable "robcos_model" {
-  description = "Model name (must be a k8s model)"
+  description = "Name of the K8s model to deploy rob-cos to"
   type        = string
 }
 
 variable "microceph_model" {
-  description = "Model name (must be a machine model)"
+  description = "Name of the machine model to deploy microceph to"
   type        = string
 }
 

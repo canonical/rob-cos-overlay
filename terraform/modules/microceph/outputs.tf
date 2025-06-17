@@ -9,7 +9,7 @@ output "requires" {
     identity_service  = "identity-service"
     receive_ca_cert   = "receive-ca-cert"
   }
-  description = "The integration endpoints required by the application"
+  description = "Map of the integration endpoints required by the application"
 }
 
 output "provides" {
@@ -19,5 +19,5 @@ output "provides" {
     mds       = "mds"
     cos_agent = "cos-agent"
   }
-  description = "The integration endpoints provided by the application"
+  description = "Map of the integration endpoints provided by the application"
 }

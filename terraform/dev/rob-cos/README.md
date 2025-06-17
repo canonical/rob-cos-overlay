@@ -9,10 +9,10 @@ refer to the provider [documentation](https://registry.terraform.io/providers/ju
 > This module is not intended to be deployed in production.
 > It rather is a demonstrator as well as a starting point for developing a production-grade configuration.
 
-## Requirements
-
-This module requires both a Juju machine model as well as a Juju K8s model to be available.
-Refer to the [usage section](#usage) below for more details.
+> [!IMPORTANT]
+> This module requires both a Juju machine model as well as a Juju K8s model to be available.
+> Furthermore, both models must be managed by the same controller.
+> Refer to the [usage section](#usage) below for more details.
 
 ## Usage
 
