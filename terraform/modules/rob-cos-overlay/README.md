@@ -51,7 +51,7 @@ terraform apply -var="model=<MODEL_NAME>"
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| model | Model name (must be a k8s model) | `string` | n/a | yes |
+| model | Name of the model to deploy to (must be a K8s model) | `string` | n/a | yes |
 | cos\_registration\_server | The cos-registration-server variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
 | foxglove\_studio | The foxglove-studio variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
 

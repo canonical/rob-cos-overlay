@@ -72,8 +72,8 @@ terraform apply -var="robcos_model=<K8S_MODEL_NAME>" -var="microceph_model=<MACH
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| microceph\_model | Model name (must be a machine model) | `string` | n/a | yes |
-| robcos\_model | Model name (must be a k8s model) | `string` | n/a | yes |
+| microceph\_model | Name of the machine model to deploy microceph to | `string` | n/a | yes |
+| robcos\_model | Name of the K8s model to deploy rob-cos to | `string` | n/a | yes |
 | cos\_lite | The cos-lite variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") use_tls = optional(bool, false) })``` | `{}` | no |
 | cos\_registration\_server | The cos-registration-server variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
 | foxglove\_studio | The foxglove-studio variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
