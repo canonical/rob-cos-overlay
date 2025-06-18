@@ -11,10 +11,10 @@ data "juju_model" "microceph_model" {
 # -------------- # Applications --------------
 
 module "cos_lite" {
-  source     = "git::https://github.com/canonical/observability//terraform/modules/cos-lite"
-  model_name = data.juju_model.robcos_model.name
-  channel    = var.cos_lite.channel
-  use_tls    = var.cos_lite.use_tls
+  source  = "git::https://github.com/canonical/observability-stack//terraform/cos-lite"
+  channel = var.cos_lite.channel
+  model   = data.juju_model.robcos_model.name
+  use_tls = var.cos_lite.use_tls
 }
 
 module "robcos_overlay" {
