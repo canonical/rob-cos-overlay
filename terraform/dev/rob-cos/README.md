@@ -42,7 +42,8 @@ terraform apply -var="robcos_model=<K8S_MODEL_NAME>" -var="microceph_model=<MACH
 
 | Name | Source | Version |
 |------|--------|---------|
-| cos\_lite | git::https://github.com/canonical/observability//terraform/modules/cos-lite | n/a |
+| blackbox\_exporter | git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform | feat/terraform |
+| cos\_lite | git::https://github.com/ubuntu-robotics/observability-stack//terraform/cos-lite | fix/cos-lite-outputs |
 | microceph | ../../modules/microceph | n/a |
 | robcos\_overlay | ../../modules/robcos_overlay | n/a |
 
@@ -50,20 +51,18 @@ terraform apply -var="robcos_model=<K8S_MODEL_NAME>" -var="microceph_model=<MACH
 
 | Name | Type |
 |------|------|
+| [juju_integration.catalogue_blackbox_exporter](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.catalogue_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.catalogue_foxglove_studio](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.grafana_dashboard_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.grafana_dashboard_blackbox_exporter](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.grafana_dashboard_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.grafana_dashboard_foxglove_studio](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.ingress_blackbox_exporter](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.ingress_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.ingress_foxglove_studio](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.ingress_microceph](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.logging_alert_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.logging_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.logging_foxglove_studio](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.probes_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.send_remote_write_alerts_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.tracing_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.tracing_foxglove_studio](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_offer.microceph](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/offer) | resource |
 | [juju_model.microceph_model](https://registry.terraform.io/providers/juju/juju/latest/docs/data-sources/model) | data source |
 | [juju_model.robcos_model](https://registry.terraform.io/providers/juju/juju/latest/docs/data-sources/model) | data source |
@@ -74,6 +73,7 @@ terraform apply -var="robcos_model=<K8S_MODEL_NAME>" -var="microceph_model=<MACH
 |------|-------------|------|---------|:--------:|
 | microceph\_model | Name of the machine model to deploy microceph to | `string` | n/a | yes |
 | robcos\_model | Name of the K8s model to deploy rob-cos to | `string` | n/a | yes |
+| blackbox\_exporter | The blackbox-exporter variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/beta") revision = optional(number) })``` | `{}` | no |
 | cos\_lite | The cos-lite variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") use_tls = optional(bool, false) })``` | `{}` | no |
 | cos\_registration\_server | The cos-registration-server variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
 | foxglove\_studio | The foxglove-studio variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
