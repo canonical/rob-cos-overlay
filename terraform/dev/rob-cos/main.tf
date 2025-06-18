@@ -17,7 +17,11 @@ module "blackbox_exporter" {
 }
 
 module "cos_lite" {
-  source  = "git::https://github.com/canonical/observability-stack//terraform/cos-lite"
+  # source  = "git::https://github.com/canonical/observability-stack//terraform/cos-lite"
+  # Use this fork until the following PRs land:
+  # https://github.com/canonical/observability-stack/pull/46
+  # https://github.com/canonical/observability-stack/pull/48
+  source  = "git::https://github.com/ubuntu-robotics/observability-stack//terraform/cos-lite?ref=fix/cos-lite-outputs"
   channel = var.cos_lite.channel
   model   = data.juju_model.robcos_model.name
   use_tls = var.cos_lite.use_tls
@@ -72,7 +76,7 @@ resource "juju_integration" "catalogue_cos_registration_server" {
 
   application {
     name     = module.cos_lite.app_names.catalogue
-    endpoint = "catalogue"
+    endpoint = module.cos_lite.catalogue.endpoints.catalogue
   }
 
   application {
@@ -86,7 +90,7 @@ resource "juju_integration" "catalogue_foxglove_studio" {
 
   application {
     name     = module.cos_lite.app_names.catalogue
-    endpoint = "catalogue"
+    endpoint = module.cos_lite.catalogue.endpoints.catalogue
   }
 
   application {
@@ -100,7 +104,7 @@ resource "juju_integration" "catalogue_blackbox_exporter" {
 
   application {
     name     = module.cos_lite.app_names.catalogue
-    endpoint = "catalogue"
+    endpoint = module.cos_lite.catalogue.endpoints.catalogue
   }
 
   application {
@@ -309,7 +313,7 @@ resource "juju_integration" "ingress_blackbox_exporter" {
 
   application {
     name     = module.cos_lite.app_names.traefik
-    endpoint = "ingress"
+    endpoint = module.cos_lite.traefik.endpoints.ingress
   }
 
   application {
@@ -323,7 +327,7 @@ resource "juju_integration" "ingress_cos_registration_server" {
 
   application {
     name     = module.cos_lite.app_names.traefik
-    endpoint = "traefik-route"
+    endpoint = module.cos_lite.traefik.endpoints.traefik_route
   }
 
   application {
@@ -337,7 +341,7 @@ resource "juju_integration" "ingress_foxglove_studio" {
 
   application {
     name     = module.cos_lite.app_names.traefik
-    endpoint = "traefik-route"
+    endpoint = module.cos_lite.traefik.endpoints.traefik_route
   }
 
   application {
@@ -351,7 +355,7 @@ resource "juju_integration" "ingress_microceph" {
 
   application {
     name     = module.cos_lite.app_names.traefik
-    endpoint = "traefik-route"
+    endpoint = module.cos_lite.traefik.endpoints.traefik_route
   }
 
   application {
