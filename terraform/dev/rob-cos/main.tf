@@ -10,6 +10,12 @@ data "juju_model" "microceph_model" {
 
 # -------------- # Applications --------------
 
+module "blackbox_exporter" {
+  source   = "git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform?ref=feat/terraform"
+  app_name = "blackbox-exporter"
+  model    = data.juju_model.robcos_model.name
+}
+
 module "cos_lite" {
   source  = "git::https://github.com/canonical/observability-stack//terraform/cos-lite"
   channel = var.cos_lite.channel
@@ -43,6 +49,22 @@ resource "juju_offer" "microceph" {
 
 # -------------- # Integrations --------------
 
+# Provided by Blackbox Exporter
+
+resource "juju_integration" "grafana_dashboard_blackbox_exporter" {
+  model = data.juju_model.robcos_model.name
+
+  application {
+    name     = module.robcos_overlay.blackbox_exporter.app_name
+    endpoint = module.robcos_overlay.blackbox_exporter.provides.grafana_dashboard
+  }
+
+  application {
+    name     = module.cos_lite.app_names.grafana
+    endpoint = module.cos_lite.grafana.endpoints.grafana_dashboard
+  }
+}
+
 # Provided by Catalogue
 
 resource "juju_integration" "catalogue_cos_registration_server" {
@@ -73,6 +95,20 @@ resource "juju_integration" "catalogue_foxglove_studio" {
   }
 }
 
+resource "juju_integration" "catalogue_blackbox_exporter" {
+  model = data.juju_model.robcos_model.name
+
+  application {
+    name     = module.cos_lite.app_names.catalogue
+    endpoint = "catalogue"
+  }
+
+  application {
+    name     = module.blackbox_exporter.app_name
+    endpoint = module.blackbox_exporter.requires.catalogue
+  }
+}
+
 # Provided by COS registration server
 
 resource "juju_integration" "grafana_dashboard_cos_registration_server" {
@@ -100,6 +136,20 @@ resource "juju_integration" "grafana_dashboard_devices_cos_registration_server" 
   application {
     name     = module.cos_lite.app_names.grafana
     endpoint = module.cos_lite.grafana.endpoints.grafana_dashboard
+  }
+}
+
+resource "juju_integration" "probes_devices_cos_registration_server" {
+  model = data.juju_model.robcos_model.name
+
+  application {
+    name     = module.robcos_overlay.cos_registration_server.app_name
+    endpoint = module.robcos_overlay.cos_registration_server.provides.probes_devices
+  }
+
+  application {
+    name     = module.blackbox_exporter.app_name
+    endpoint = "probes"
   }
 }
 
@@ -253,6 +303,20 @@ resource "juju_integration" "send_remote_write_alerts_devices_cos_registration_s
 }
 
 # Provided by Traefik
+
+resource "juju_integration" "ingress_blackbox_exporter" {
+  model = data.juju_model.robcos_model.name
+
+  application {
+    name     = module.cos_lite.app_names.traefik
+    endpoint = "ingress"
+  }
+
+  application {
+    name     = module.blackbox_exporter.app_name
+    endpoint = module.blackbox_exporter.requires.ingress
+  }
+}
 
 resource "juju_integration" "ingress_cos_registration_server" {
   model = data.juju_model.robcos_model.name

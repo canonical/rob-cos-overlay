@@ -8,6 +8,18 @@ variable "microceph_model" {
   type        = string
 }
 
+variable "blackbox_exporter" {
+  type = object({
+    channel  = optional(string, "latest/beta")
+    revision = optional(number)
+  })
+  default     = {}
+  description = <<-EOT
+  The blackbox-exporter variables.
+  Please refer to the module for more information.
+  EOT
+}
+
 variable "cos_lite" {
   type = object({
     channel = optional(string, "latest/edge")
