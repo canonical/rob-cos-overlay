@@ -115,20 +115,6 @@ resource "juju_integration" "catalogue_blackbox_exporter" {
 
 # Provided by COS registration server
 
-resource "juju_integration" "grafana_dashboard_cos_registration_server" {
-  model = data.juju_model.robcos_model.name
-
-  application {
-    name     = module.robcos_overlay.cos_registration_server.app_name
-    endpoint = module.robcos_overlay.cos_registration_server.provides.grafana_dashboard
-  }
-
-  application {
-    name     = module.cos_lite.app_names.grafana_agent
-    endpoint = "grafana-dashboards-consumer"
-  }
-}
-
 resource "juju_integration" "grafana_dashboard_devices_cos_registration_server" {
   model = data.juju_model.robcos_model.name
 
@@ -157,64 +143,6 @@ resource "juju_integration" "probes_devices_cos_registration_server" {
   }
 }
 
-# resource "juju_integration" "probes_cos_registration_server" {
-#   model = data.juju_model.robcos_model.name
-
-#   application {
-#     name     = module.robcos_overlay.cos_registration_server.app_name
-#     endpoint = module.robcos_overlay.cos_registration_server.provides.probes
-#   }
-
-#   application {
-#     name     = module.cos_lite.app_names.blackbox
-#     endpoint = "probes"
-#   }
-# }
-
-# resource "juju_integration" "probes_devices_cos_registration_server" {
-#   model = data.juju_model.robcos_model.name
-
-#   application {
-#     name     = module.robcos_overlay.cos_registration_server.app_name
-#     endpoint = module.robcos_overlay.cos_registration_server.provides.probes_devices
-#   }
-
-#   application {
-#     name     = module.cos_lite.app_names.blackbox
-#     endpoint = "probes"
-#   }
-# }
-
-# Provided by Foxglove Studio
-
-resource "juju_integration" "grafana_dashboard_foxglove_studio" {
-  model = data.juju_model.robcos_model.name
-
-  application {
-    name     = module.robcos_overlay.foxglove_studio.app_name
-    endpoint = module.robcos_overlay.foxglove_studio.provides.grafana_dashboard
-  }
-
-  application {
-    name     = module.cos_lite.app_names.grafana_agent
-    endpoint = "grafana-dashboards-consumer"
-  }
-}
-
-# resource "juju_integration" "probes_foxglove_studio" {
-#   model = data.juju_model.robcos_model.name
-
-#   application {
-#     name     = module.robcos_overlay.foxglove_studio.app_name
-#     endpoint = module.robcos_overlay.foxglove_studio.provides.probes
-#   }
-
-#   application {
-#     name     = module.cos_lite.app_names.blackbox
-#     endpoint = "probes"
-#   }
-# }
-
 # Provided by Loki
 
 resource "juju_integration" "logging_alert_devices_cos_registration_server" {
@@ -222,70 +150,12 @@ resource "juju_integration" "logging_alert_devices_cos_registration_server" {
 
   application {
     name     = module.cos_lite.app_names.loki
-    endpoint = module.cos_lite.loki.endpoints.logging #"logging"
+    endpoint = module.cos_lite.loki.endpoints.logging
   }
 
   application {
     name     = module.robcos_overlay.cos_registration_server.app_name
     endpoint = module.robcos_overlay.cos_registration_server.requires.logging_alerts_devices
-  }
-}
-
-# Provided by Grafana Agent
-
-resource "juju_integration" "logging_cos_registration_server" {
-  model = data.juju_model.robcos_model.name
-
-  application {
-    name     = module.cos_lite.app_names.grafana_agent
-    endpoint = "logging-provider"
-  }
-
-  application {
-    name     = module.robcos_overlay.cos_registration_server.app_name
-    endpoint = module.robcos_overlay.cos_registration_server.requires.logging
-  }
-}
-
-resource "juju_integration" "tracing_cos_registration_server" {
-  model = data.juju_model.robcos_model.name
-
-  application {
-    name     = module.cos_lite.app_names.grafana_agent
-    endpoint = "tracing-provider"
-  }
-
-  application {
-    name     = module.robcos_overlay.cos_registration_server.app_name
-    endpoint = module.robcos_overlay.cos_registration_server.requires.tracing
-  }
-}
-
-resource "juju_integration" "logging_foxglove_studio" {
-  model = data.juju_model.robcos_model.name
-
-  application {
-    name     = module.cos_lite.app_names.grafana_agent
-    endpoint = "logging-provider"
-  }
-
-  application {
-    name     = module.robcos_overlay.foxglove_studio.app_name
-    endpoint = module.robcos_overlay.foxglove_studio.requires.logging
-  }
-}
-
-resource "juju_integration" "tracing_foxglove_studio" {
-  model = data.juju_model.robcos_model.name
-
-  application {
-    name     = module.cos_lite.app_names.grafana_agent
-    endpoint = "tracing-provider"
-  }
-
-  application {
-    name     = module.robcos_overlay.foxglove_studio.app_name
-    endpoint = module.robcos_overlay.foxglove_studio.requires.tracing
   }
 }
 
@@ -297,7 +167,6 @@ resource "juju_integration" "send_remote_write_alerts_devices_cos_registration_s
   application {
     name     = module.cos_lite.app_names.prometheus
     endpoint = module.cos_lite.prometheus.endpoints.receive_remote_write
-    # endpoint = "receive_remote_write"
   }
 
   application {
