@@ -24,6 +24,19 @@ To deploy this module with its needed dependency, you can run:
 terraform apply -var="robcos_model=<K8S_MODEL_NAME>" -var="microceph_model=<MACHINE_MODEL_NAME>"
 ```
 
+### On destroy
+
+There is currently a [bug](https://github.com/juju/terraform-provider-juju/issues/721) that prevents from seamlessly destroying a deployment.
+To work around that bug, we have to manually remove an integration from both `juju` and the Terraform state.
+To do so:
+
+```bash
+juju remove-relation traefik:traefik-route microceph:traefik-route-rgw --model <robcos-model>
+terraform state rm juju_integration.ingress_microceph
+```
+
+We can then destroy the deployment as usual with `terraform destroy`.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
