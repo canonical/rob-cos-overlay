@@ -17,11 +17,7 @@ module "blackbox_exporter" {
 }
 
 module "cos_lite" {
-  # source  = "git::https://github.com/canonical/observability-stack//terraform/cos-lite"
-  # Use this fork until the following PRs land:
-  # https://github.com/canonical/observability-stack/pull/46
-  # https://github.com/canonical/observability-stack/pull/48
-  source  = "git::https://github.com/ubuntu-robotics/observability-stack//terraform/cos-lite?ref=fix/cos-lite-outputs"
+  source  = "git::https://github.com/canonical/observability-stack//terraform/cos-lite"
   channel = var.cos_lite.channel
   model   = data.juju_model.robcos_model.name
   use_tls = var.cos_lite.use_tls
@@ -64,8 +60,8 @@ resource "juju_integration" "grafana_dashboard_blackbox_exporter" {
   }
 
   application {
-    name     = module.cos_lite.app_names.grafana
-    endpoint = module.cos_lite.grafana.endpoints.grafana_dashboard
+    name     = module.cos_lite.components.grafana.app_name
+    endpoint = module.cos_lite.components.grafana.endpoints.grafana_dashboard
   }
 }
 
@@ -75,8 +71,8 @@ resource "juju_integration" "catalogue_cos_registration_server" {
   model = data.juju_model.robcos_model.name
 
   application {
-    name     = module.cos_lite.app_names.catalogue
-    endpoint = module.cos_lite.catalogue.endpoints.catalogue
+    name     = module.cos_lite.components.catalogue.app_name
+    endpoint = module.cos_lite.components.catalogue.endpoints.catalogue
   }
 
   application {
@@ -89,8 +85,8 @@ resource "juju_integration" "catalogue_foxglove_studio" {
   model = data.juju_model.robcos_model.name
 
   application {
-    name     = module.cos_lite.app_names.catalogue
-    endpoint = module.cos_lite.catalogue.endpoints.catalogue
+    name     = module.cos_lite.components.catalogue.app_name
+    endpoint = module.cos_lite.components.catalogue.endpoints.catalogue
   }
 
   application {
@@ -103,8 +99,8 @@ resource "juju_integration" "catalogue_blackbox_exporter" {
   model = data.juju_model.robcos_model.name
 
   application {
-    name     = module.cos_lite.app_names.catalogue
-    endpoint = module.cos_lite.catalogue.endpoints.catalogue
+    name     = module.cos_lite.components.catalogue.app_name
+    endpoint = module.cos_lite.components.catalogue.endpoints.catalogue
   }
 
   application {
@@ -124,8 +120,8 @@ resource "juju_integration" "grafana_dashboard_devices_cos_registration_server" 
   }
 
   application {
-    name     = module.cos_lite.app_names.grafana
-    endpoint = module.cos_lite.grafana.endpoints.grafana_dashboard
+    name     = module.cos_lite.components.grafana.app_names
+    endpoint = module.cos_lite.components.grafana.endpoints.grafana_dashboard
   }
 }
 
@@ -149,8 +145,8 @@ resource "juju_integration" "logging_alert_devices_cos_registration_server" {
   model = data.juju_model.robcos_model.name
 
   application {
-    name     = module.cos_lite.app_names.loki
-    endpoint = module.cos_lite.loki.endpoints.logging
+    name     = module.cos_lite.components.loki.app_name
+    endpoint = module.cos_lite.components.loki.endpoints.logging
   }
 
   application {
@@ -165,8 +161,8 @@ resource "juju_integration" "send_remote_write_alerts_devices_cos_registration_s
   model = data.juju_model.robcos_model.name
 
   application {
-    name     = module.cos_lite.app_names.prometheus
-    endpoint = module.cos_lite.prometheus.endpoints.receive_remote_write
+    name     = module.cos_lite.components.prometheus.app_name
+    endpoint = module.cos_lite.components.prometheus.endpoints.receive_remote_write
   }
 
   application {
@@ -181,8 +177,8 @@ resource "juju_integration" "ingress_blackbox_exporter" {
   model = data.juju_model.robcos_model.name
 
   application {
-    name     = module.cos_lite.app_names.traefik
-    endpoint = module.cos_lite.traefik.endpoints.ingress
+    name     = module.cos_lite.components.traefik.app_name
+    endpoint = module.cos_lite.components.traefik.endpoints.ingress
   }
 
   application {
@@ -195,8 +191,8 @@ resource "juju_integration" "ingress_cos_registration_server" {
   model = data.juju_model.robcos_model.name
 
   application {
-    name     = module.cos_lite.app_names.traefik
-    endpoint = module.cos_lite.traefik.endpoints.traefik_route
+    name     = module.cos_lite.components.traefik.app_name
+    endpoint = module.cos_lite.components.traefik.endpoints.traefik_route
   }
 
   application {
@@ -209,8 +205,8 @@ resource "juju_integration" "ingress_foxglove_studio" {
   model = data.juju_model.robcos_model.name
 
   application {
-    name     = module.cos_lite.app_names.traefik
-    endpoint = module.cos_lite.traefik.endpoints.traefik_route
+    name     = module.cos_lite.components.traefik.app_name
+    endpoint = module.cos_lite.components.traefik.endpoints.traefik_route
   }
 
   application {
@@ -223,8 +219,8 @@ resource "juju_integration" "ingress_microceph" {
   model = data.juju_model.robcos_model.name
 
   application {
-    name     = module.cos_lite.app_names.traefik
-    endpoint = module.cos_lite.traefik.endpoints.traefik_route
+    name     = module.cos_lite.components.traefik.app_name
+    endpoint = module.cos_lite.components.traefik.endpoints.traefik_route
   }
 
   application {
