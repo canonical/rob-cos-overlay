@@ -55,8 +55,8 @@ resource "juju_integration" "grafana_dashboard_blackbox_exporter" {
   model = data.juju_model.robcos_model.name
 
   application {
-    name     = module.robcos_overlay.blackbox_exporter.app_name
-    endpoint = module.robcos_overlay.blackbox_exporter.provides.grafana_dashboard
+    name     = module.blackbox_exporter.app_name
+    endpoint = module.blackbox_exporter.provides.grafana_dashboard
   }
 
   application {
@@ -120,7 +120,7 @@ resource "juju_integration" "grafana_dashboard_devices_cos_registration_server" 
   }
 
   application {
-    name     = module.cos_lite.components.grafana.app_names
+    name     = module.cos_lite.components.grafana.app_name
     endpoint = module.cos_lite.components.grafana.endpoints.grafana_dashboard
   }
 }
