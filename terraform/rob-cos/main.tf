@@ -24,14 +24,14 @@ module "cos_lite" {
 }
 
 module "robcos_overlay" {
-  source                  = "../../modules/robcos_overlay"
+  source                  = "./../modules/rob-cos-overlay"
   model                   = data.juju_model.robcos_model.name
   cos_registration_server = var.cos_registration_server
   foxglove_studio         = var.foxglove_studio
 }
 
 module "microceph" {
-  source   = "../../modules/microceph"
+  source   = "./../modules/microceph"
   app_name = "microceph"
   model    = data.juju_model.microceph_model.name
   channel  = var.microceph.channel
