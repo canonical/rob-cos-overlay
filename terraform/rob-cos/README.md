@@ -43,9 +43,9 @@ terraform apply -var="robcos_model=<K8S_MODEL_NAME>" -var="microceph_model=<MACH
 | Name | Source | Version |
 |------|--------|---------|
 | blackbox\_exporter | git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform | feat/terraform |
-| cos\_lite | git::https://github.com/ubuntu-robotics/observability-stack//terraform/cos-lite | fix/cos-lite-outputs |
-| microceph | ../../modules/microceph | n/a |
-| robcos\_overlay | ../../modules/robcos_overlay | n/a |
+| cos\_lite | git::https://github.com/canonical/observability-stack//terraform/cos-lite | n/a |
+| microceph | ./../modules/microceph | n/a |
+| robcos\_overlay | ./../modules/rob-cos-overlay | n/a |
 
 ## Resources
 
@@ -84,6 +84,7 @@ terraform apply -var="robcos_model=<K8S_MODEL_NAME>" -var="microceph_model=<MACH
 | Name | Description |
 |------|-------------|
 | app\_names | The names of the deployed applications |
+| blackbox\_exporter | Outputs from the Blackbox-exporter module |
 | cos\_lite | Outputs from the COS lite module |
 | microceph | Outputs from the microceph module |
 | robcos\_overlay | Outputs from the robcos-overlay module |
