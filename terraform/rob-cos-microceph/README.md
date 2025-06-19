@@ -1,6 +1,6 @@
-# Terraform module for `rob-cos`
+# Terraform module for `rob-cos-microceph`
 
-This is a Terraform module facilitating the deployment of the COS for Devices project,
+This is a Terraform module facilitating the deployment of the COS for Devices project with a Microceph storage backend,
 using the [Terraform Juju provider](https://github.com/juju/terraform-provider-juju/).
 For more information,
 refer to the provider [documentation](https://registry.terraform.io/providers/juju/juju/latest/docs).
@@ -9,6 +9,11 @@ refer to the provider [documentation](https://registry.terraform.io/providers/ju
 > This module is not intended to be deployed in production.
 > It rather is a demonstrator as well as a starting point for developing a production-grade configuration.
 
+> [!IMPORTANT]
+> This module requires both a Juju machine model as well as a Juju K8s model to be available.
+> Furthermore, both models must be managed by the same controller.
+> Refer to the [usage section](#usage) below for more details.
+
 ## Usage
 
 Users should ensure that Terraform is aware of the `juju_model` dependency of the charm module.
@@ -16,8 +21,21 @@ Users should ensure that Terraform is aware of the `juju_model` dependency of th
 To deploy this module with its needed dependency, you can run:
 
 ```bash
-terraform apply -var="model=<K8S_MODEL_NAME>"
+terraform apply -var="robcos_model=<K8S_MODEL_NAME>" -var="microceph_model=<MACHINE_MODEL_NAME>"
 ```
+
+### On destroy
+
+There is currently a [bug](https://github.com/juju/terraform-provider-juju/issues/721) that prevents from seamlessly destroying a deployment.
+To work around that bug, we have to manually remove an integration from both `juju` and the Terraform state.
+To do so:
+
+```bash
+juju remove-relation traefik:traefik-route microceph:traefik-route-rgw --model <robcos-model>
+terraform state rm juju_integration.ingress_microceph
+```
+
+We can then destroy the deployment as usual with `terraform destroy`.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -38,9 +56,9 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 | Name | Source | Version |
 |------|--------|---------|
 | blackbox\_exporter | git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform | feat/terraform |
-| cos\_lite | git::https://github.com/canonical/observability-stack//terraform/cos-lite | n/a |
-| microceph | ./../modules/microceph | n/a |
-| robcos\_overlay | ./../modules/rob-cos-overlay | n/a |
+| cos\_lite | git::https://github.com/ubuntu-robotics/observability-stack//terraform/cos-lite | fix/cos-lite-outputs |
+| microceph | ../../modules/microceph | n/a |
+| robcos\_overlay | ../../modules/robcos_overlay | n/a |
 
 ## Resources
 
@@ -79,7 +97,6 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 | Name | Description |
 |------|-------------|
 | app\_names | The names of the deployed applications |
-| blackbox\_exporter | Outputs from the Blackbox-exporter module |
 | cos\_lite | Outputs from the COS lite module |
 | microceph | Outputs from the microceph module |
 | robcos\_overlay | Outputs from the robcos-overlay module |

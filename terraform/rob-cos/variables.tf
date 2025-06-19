@@ -1,10 +1,5 @@
-variable "robcos_model" {
-  description = "Name of the K8s model to deploy rob-cos to"
-  type        = string
-}
-
-variable "microceph_model" {
-  description = "Name of the machine model to deploy microceph to"
+variable "model" {
+  description = "Name of the model to deploy to (must be a K8s model)"
   type        = string
 }
 
@@ -52,19 +47,6 @@ variable "foxglove_studio" {
   default     = {}
   description = <<-EOT
   The foxglove-studio variables.
-  Please refer to the module for more information.
-  EOT
-}
-
-variable "microceph" {
-  type = object({
-    channel  = optional(string, "squid/stable")
-    revision = optional(number, null)
-    units    = optional(number, 3)
-  })
-  default     = {}
-  description = <<-EOT
-  The microceph variables.
   Please refer to the module for more information.
   EOT
 }
