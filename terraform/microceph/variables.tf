@@ -27,6 +27,7 @@ variable "constraints" {
 variable "model" {
   description = "Name of the model to deploy to (must be a machine model)"
   type        = string
+  nullable    = false
 }
 
 variable "revision" {

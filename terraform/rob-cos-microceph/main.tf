@@ -45,6 +45,7 @@ module "microceph" {
   app_name = "microceph"
   model    = data.juju_model.microceph_model.name
   channel  = var.microceph.channel
+  revision = var.microceph.revision
   units    = var.microceph.units
   config   = { "enable-rgw" = "*" }
 

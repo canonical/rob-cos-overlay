@@ -1,11 +1,13 @@
 variable "robcos_model" {
   description = "Name of the K8s model to deploy rob-cos to"
   type        = string
+  nullable    = false
 }
 
 variable "microceph_model" {
   description = "Name of the machine model to deploy microceph to"
   type        = string
+  nullable    = false
 }
 
 variable "robcos_controller" {
@@ -20,6 +22,8 @@ variable "robcos_controller" {
   The Juju controller credentials for the controller managing the K8s model
   where rob-cos is to be deployed
   EOT
+  sensitive   = true
+  ephemeral   = true
 }
 
 variable "microceph_controller" {
@@ -34,6 +38,8 @@ variable "microceph_controller" {
   The Juju controller credentials for the controller managing the machine model
   where microceph is to be deployed
   EOT
+  sensitive   = true
+  ephemeral   = true
 }
 
 variable "cos_lite" {
@@ -63,7 +69,7 @@ variable "microceph" {
 
 variable "rob_cos" {
   type = object({
-    channel = optional(string, "latest/edge")
+    # channel = optional(string, "latest/edge")
   })
   default     = {}
   description = <<-EOT
