@@ -38,9 +38,9 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 | Name | Source | Version |
 |------|--------|---------|
 | blackbox\_exporter | git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform | feat/terraform |
-| cos\_lite | git::https://github.com/canonical/observability-stack//terraform/cos-lite | n/a |
-| microceph | ./../modules/microceph | n/a |
-| robcos\_overlay | ./../modules/rob-cos-overlay | n/a |
+| cos\_lite | git::https://github.com/canonical/observability-stack//terraform/cos-lite | 67e0cbfddea38606751fe16bc09826f6fe7d5aaf |
+| cos\_registration\_server | git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform | n/a |
+| foxglove\_studio | git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform | n/a |
 
 ## Resources
 
@@ -54,33 +54,25 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 | [juju_integration.ingress_blackbox_exporter](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.ingress_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.ingress_foxglove_studio](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.ingress_microceph](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.logging_alert_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.probes_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.send_remote_write_alerts_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_offer.microceph](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/offer) | resource |
-| [juju_model.microceph_model](https://registry.terraform.io/providers/juju/juju/latest/docs/data-sources/model) | data source |
-| [juju_model.robcos_model](https://registry.terraform.io/providers/juju/juju/latest/docs/data-sources/model) | data source |
+| [juju_model.model](https://registry.terraform.io/providers/juju/juju/latest/docs/data-sources/model) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| microceph\_model | Name of the machine model to deploy microceph to | `string` | n/a | yes |
-| robcos\_model | Name of the K8s model to deploy rob-cos to | `string` | n/a | yes |
-| blackbox\_exporter | The blackbox-exporter variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/beta") revision = optional(number) })``` | `{}` | no |
-| cos\_lite | The cos-lite variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") use_tls = optional(bool, false) })``` | `{}` | no |
+| model | Name of the model to deploy to (must be a K8s model) | `string` | n/a | yes |
+| blackbox\_exporter | The blackbox-exporter variables. Please refer to the module for more information. | ```object({ channel = optional(string, "1/stable") revision = optional(number) })``` | `{}` | no |
+| cos\_lite | The cos-lite variables. Please refer to the module for more information. | ```object({ channel = optional(string, "1/stable") use_tls = optional(bool, false) })``` | `{}` | no |
 | cos\_registration\_server | The cos-registration-server variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
 | foxglove\_studio | The foxglove-studio variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
-| microceph | The microceph variables. Please refer to the module for more information. | ```object({ channel = optional(string, "squid/stable") revision = optional(number, null) units = optional(number, 3) })``` | `{}` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | app\_names | The names of the deployed applications |
-| blackbox\_exporter | Outputs from the Blackbox-exporter module |
-| cos\_lite | Outputs from the COS lite module |
-| microceph | Outputs from the microceph module |
-| robcos\_overlay | Outputs from the robcos-overlay module |
+| components | Outputs of the deployed applications |
 <!-- END_TF_DOCS -->

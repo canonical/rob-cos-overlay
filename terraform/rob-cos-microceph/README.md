@@ -50,33 +50,21 @@ We can then destroy the deployment as usual with `terraform destroy`.
 
 | Name | Version |
 |------|---------|
-| juju | ~> 0.19.0 |
+| juju.microceph | ~> 0.19.0 |
+| juju.robcos | ~> 0.19.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| blackbox\_exporter | git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform | feat/terraform |
-| cos\_lite | git::https://github.com/ubuntu-robotics/observability-stack//terraform/cos-lite | fix/cos-lite-outputs |
-| microceph | ../../modules/microceph | n/a |
-| robcos\_overlay | ../../modules/robcos_overlay | n/a |
+| microceph | ../microceph | n/a |
+| rob\_cos | ../rob-cos | n/a |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [juju_integration.catalogue_blackbox_exporter](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.catalogue_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.catalogue_foxglove_studio](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.grafana_dashboard_blackbox_exporter](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.grafana_dashboard_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.ingress_blackbox_exporter](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.ingress_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.ingress_foxglove_studio](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.ingress_microceph](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.logging_alert_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.probes_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
-| [juju_integration.send_remote_write_alerts_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_offer.microceph](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/offer) | resource |
 | [juju_model.microceph_model](https://registry.terraform.io/providers/juju/juju/latest/docs/data-sources/model) | data source |
 | [juju_model.robcos_model](https://registry.terraform.io/providers/juju/juju/latest/docs/data-sources/model) | data source |
@@ -87,18 +75,16 @@ We can then destroy the deployment as usual with `terraform destroy`.
 |------|-------------|------|---------|:--------:|
 | microceph\_model | Name of the machine model to deploy microceph to | `string` | n/a | yes |
 | robcos\_model | Name of the K8s model to deploy rob-cos to | `string` | n/a | yes |
-| blackbox\_exporter | The blackbox-exporter variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/beta") revision = optional(number) })``` | `{}` | no |
-| cos\_lite | The cos-lite variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") use_tls = optional(bool, false) })``` | `{}` | no |
-| cos\_registration\_server | The cos-registration-server variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
-| foxglove\_studio | The foxglove-studio variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
+| cos\_lite | The cos-lite variables. Please refer to the module for more information. | ```object({ channel = optional(string, "1/stable") use_tls = optional(bool, false) })``` | `{}` | no |
 | microceph | The microceph variables. Please refer to the module for more information. | ```object({ channel = optional(string, "squid/stable") revision = optional(number, null) units = optional(number, 3) })``` | `{}` | no |
+| microceph\_controller | The Juju controller credentials for the controller managing the machine model where microceph is to be deployed | ```object({ addresses = optional(string) username = optional(string) password = optional(string) ca_certificate_path = optional(string) })``` | `{}` | no |
+| rob\_cos | The rob-cos variables. Please refer to the module for more information. | ```object({ # channel = optional(string, "latest/edge") })``` | `{}` | no |
+| robcos\_controller | The Juju controller credentials for the controller managing the K8s model where rob-cos is to be deployed | ```object({ addresses = optional(string) username = optional(string) password = optional(string) ca_certificate_path = optional(string) })``` | `{}` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | app\_names | The names of the deployed applications |
-| cos\_lite | Outputs from the COS lite module |
-| microceph | Outputs from the microceph module |
-| robcos\_overlay | Outputs from the robcos-overlay module |
+| components | Outputs of the deployed applications |
 <!-- END_TF_DOCS -->
