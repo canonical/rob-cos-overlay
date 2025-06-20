@@ -21,7 +21,7 @@ jobs:
     - name: Render terraform docs and push changes back to PR
       uses: terraform-docs/gh-actions@v1
       with:
-        working-dir: terraform/rob-cos,terraform/modules/microceph,terraform/modules/rob-cos-overlay
+        working-dir: terraform/rob-cos,terraform/rob-cos-microceph,terraform/microceph
         output-file: README.md
         output-method: inject
         git-push: "true"
