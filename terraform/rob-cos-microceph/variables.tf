@@ -10,7 +10,7 @@ variable "microceph_model" {
 
 variable "cos_lite" {
   type = object({
-    channel = optional(string, "latest/edge")
+    channel = optional(string, "1/stable")
     use_tls = optional(bool, false)
   })
   default     = {}

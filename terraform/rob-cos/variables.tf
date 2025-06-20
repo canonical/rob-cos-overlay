@@ -5,7 +5,7 @@ variable "model" {
 
 variable "blackbox_exporter" {
   type = object({
-    channel  = optional(string, "latest/beta")
+    channel  = optional(string, "1/stable")
     revision = optional(number)
   })
   default     = {}
@@ -17,7 +17,7 @@ variable "blackbox_exporter" {
 
 variable "cos_lite" {
   type = object({
-    channel = optional(string, "latest/edge")
+    channel = optional(string, "1/stable")
     use_tls = optional(bool, false)
   })
   default     = {}

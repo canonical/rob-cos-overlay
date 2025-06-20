@@ -10,6 +10,8 @@ module "blackbox_exporter" {
   source   = "git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform?ref=feat/terraform"
   app_name = "blackbox-exporter"
   model    = data.juju_model.model.name
+  channel  = var.blackbox_exporter.channel
+  revision = var.blackbox_exporter.revision
 }
 
 module "cos_lite" {
