@@ -10,8 +10,9 @@ refer to the provider [documentation](https://registry.terraform.io/providers/ju
 > It rather is a demonstrator as well as a starting point for developing a production-grade configuration.
 
 > [!IMPORTANT]
-> This module requires both a Juju machine model as well as a Juju K8s model to be available.
-> Furthermore, both models must be managed by the same controller.
+> This module deploys two stacks on both a machine model as well as a K8s model.
+> Both models must be available.
+> They may be managed by the same controller, or two diffferent controllers.
 > Refer to the [usage section](#usage) below for more details.
 
 ## Usage

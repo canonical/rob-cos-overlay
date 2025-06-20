@@ -8,6 +8,34 @@ variable "microceph_model" {
   type        = string
 }
 
+variable "robcos_controller" {
+  type = object({
+    addresses           = optional(string)
+    username            = optional(string)
+    password            = optional(string)
+    ca_certificate_path = optional(string)
+  })
+  default     = {}
+  description = <<-EOT
+  The Juju controller credentials for the controller managing the K8s model
+  where rob-cos is to be deployed
+  EOT
+}
+
+variable "microceph_controller" {
+  type = object({
+    addresses           = optional(string)
+    username            = optional(string)
+    password            = optional(string)
+    ca_certificate_path = optional(string)
+  })
+  default     = {}
+  description = <<-EOT
+  The Juju controller credentials for the controller managing the machine model
+  where microceph is to be deployed
+  EOT
+}
+
 variable "cos_lite" {
   type = object({
     channel = optional(string, "1/stable")
