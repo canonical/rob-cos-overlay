@@ -1,4 +1,4 @@
-# Terraform module for `microceph`
+# Terraform module for MicroCeph
 
 This is a Terraform module facilitating the deployment of the `microceph` charm,
 using the [Terraform Juju provider](https://github.com/juju/terraform-provider-juju/).
