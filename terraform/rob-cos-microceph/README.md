@@ -73,11 +73,11 @@ We can then destroy the deployment as usual with `terraform destroy`.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| microceph\_model | Name of the machine model to deploy microceph to | `string` | n/a | yes |
+| microceph\_model | Name of the machine model to deploy MicroCeph to | `string` | n/a | yes |
 | robcos\_model | Name of the K8s model to deploy rob-cos to | `string` | n/a | yes |
 | cos\_lite | The cos-lite variables. Please refer to the module for more information. | ```object({ channel = optional(string, "1/stable") use_tls = optional(bool, false) })``` | `{}` | no |
-| microceph | The microceph variables. Please refer to the module for more information. | ```object({ channel = optional(string, "squid/stable") revision = optional(number, null) units = optional(number, 3) })``` | `{}` | no |
-| microceph\_controller | The Juju controller credentials for the controller managing the machine model where microceph is to be deployed | ```object({ addresses = optional(string) username = optional(string) password = optional(string) ca_certificate_path = optional(string) })``` | `{}` | no |
+| microceph | The MicroCeph variables. Please refer to the module for more information. | ```object({ channel = optional(string, "squid/stable") revision = optional(number, null) units = optional(number, 3) })``` | `{}` | no |
+| microceph\_controller | The Juju controller credentials for the controller managing the machine model where MicroCeph is to be deployed | ```object({ addresses = optional(string) username = optional(string) password = optional(string) ca_certificate_path = optional(string) })``` | `{}` | no |
 | rob\_cos | The rob-cos variables. Please refer to the module for more information. | ```object({ # channel = optional(string, "latest/edge") })``` | `{}` | no |
 | robcos\_controller | The Juju controller credentials for the controller managing the K8s model where rob-cos is to be deployed | ```object({ addresses = optional(string) username = optional(string) password = optional(string) ca_certificate_path = optional(string) })``` | `{}` | no |
 
