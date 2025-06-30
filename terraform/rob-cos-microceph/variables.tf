@@ -5,7 +5,7 @@ variable "robcos_model" {
 }
 
 variable "microceph_model" {
-  description = "Name of the machine model to deploy microceph to"
+  description = "Name of the machine model to deploy MicroCeph to"
   type        = string
   nullable    = false
 }
@@ -36,7 +36,7 @@ variable "microceph_controller" {
   default     = {}
   description = <<-EOT
   The Juju controller credentials for the controller managing the machine model
-  where microceph is to be deployed
+  where MicroCeph is to be deployed
   EOT
   sensitive   = true
   ephemeral   = true
@@ -62,7 +62,7 @@ variable "microceph" {
   })
   default     = {}
   description = <<-EOT
-  The microceph variables.
+  The MicroCeph variables.
   Please refer to the module for more information.
   EOT
 }
