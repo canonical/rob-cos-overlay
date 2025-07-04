@@ -48,7 +48,7 @@ resource "juju_integration" "grafana_dashboard_blackbox_exporter" {
 
   application {
     name     = module.blackbox_exporter.app_name
-    endpoint = module.blackbox_exporter.provides.grafana_dashboard
+    endpoint = module.blackbox_exporter.endpoints.grafana_dashboard
   }
 
   application {
@@ -97,7 +97,7 @@ resource "juju_integration" "catalogue_blackbox_exporter" {
 
   application {
     name     = module.blackbox_exporter.app_name
-    endpoint = module.blackbox_exporter.requires.catalogue
+    endpoint = module.blackbox_exporter.endpoints.catalogue
   }
 }
 
@@ -175,7 +175,7 @@ resource "juju_integration" "ingress_blackbox_exporter" {
 
   application {
     name     = module.blackbox_exporter.app_name
-    endpoint = module.blackbox_exporter.requires.ingress
+    endpoint = module.blackbox_exporter.endpoints.ingress
   }
 }
 
