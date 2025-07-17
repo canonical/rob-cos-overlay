@@ -25,7 +25,7 @@ applications:
   cos-registration-server:
     charm: cos-registration-server-k8s
     series: jammy
-    channel: beta
+    channel: edge
     resources:
       cos-registration-server-image: ghcr.io/ubuntu-robotics/cos-registration-server:dev
     scale: 1
