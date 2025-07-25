@@ -59,7 +59,7 @@ module "microceph" {
 resource "juju_offer" "microceph" {
   model            = data.juju_model.microceph_model.name
   application_name = module.microceph.app_name
-  endpoint         = module.microceph.requires.traefik_route_rgw
+  endpoints        = [module.microceph.requires.traefik_route_rgw]
 
   provider = juju.microceph
 }
