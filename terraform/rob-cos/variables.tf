@@ -18,8 +18,8 @@ variable "blackbox_exporter" {
 
 variable "cos_lite" {
   type = object({
-    channel = optional(string, "1/stable")
-    use_tls = optional(bool, false)
+    channel      = optional(string, "1/stable")
+    internal_tls = optional(bool, false)
   })
   default     = {}
   description = <<-EOT
