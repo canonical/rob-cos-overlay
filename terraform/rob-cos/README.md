@@ -25,20 +25,20 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 | Name | Version |
 |------|---------|
 | terraform | >= 1.5 |
-| juju | ~> 0.19.0 |
+| juju | >= 0.14.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| juju | ~> 0.19.0 |
+| juju | >= 0.14.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
 | blackbox\_exporter | git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform | feat/terraform |
-| cos\_lite | git::https://github.com/canonical/observability-stack//terraform/cos-lite | 67e0cbfddea38606751fe16bc09826f6fe7d5aaf |
+| cos\_lite | git::https://github.com/canonical/observability-stack//terraform/cos-lite | 8e93ea9dff7c5f31f20c3f5846bd4504502d9975 |
 | cos\_registration\_server | git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform | n/a |
 | foxglove\_studio | git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform | n/a |
 
@@ -65,7 +65,7 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 |------|-------------|------|---------|:--------:|
 | model | Name of the model to deploy to (must be a K8s model) | `string` | n/a | yes |
 | blackbox\_exporter | The blackbox-exporter variables. Please refer to the module for more information. | ```object({ channel = optional(string, "1/stable") revision = optional(number) })``` | `{}` | no |
-| cos\_lite | The cos-lite variables. Please refer to the module for more information. | ```object({ channel = optional(string, "1/stable") use_tls = optional(bool, false) })``` | `{}` | no |
+| cos\_lite | The cos-lite variables. Please refer to the module for more information. | ```object({ channel = optional(string, "1/stable") internal_tls = optional(bool, false) })``` | `{}` | no |
 | cos\_registration\_server | The cos-registration-server variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
 | foxglove\_studio | The foxglove-studio variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
 
