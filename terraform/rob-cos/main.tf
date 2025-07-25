@@ -184,7 +184,7 @@ resource "juju_integration" "ingress_cos_registration_server" {
 
   application {
     name     = module.cos_lite.components.traefik.app_name
-    endpoint = module.cos_lite.components.traefik.endpoints.traefik_route
+    endpoint = module.cos_lite.components.traefik.endpoints.ingress
   }
 
   application {
@@ -198,7 +198,7 @@ resource "juju_integration" "ingress_foxglove_studio" {
 
   application {
     name     = module.cos_lite.components.traefik.app_name
-    endpoint = module.cos_lite.components.traefik.endpoints.traefik_route
+    endpoint = module.cos_lite.components.traefik.endpoints.ingress
   }
 
   application {
