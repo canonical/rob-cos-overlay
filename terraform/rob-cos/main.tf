@@ -15,10 +15,10 @@ module "blackbox_exporter" {
 }
 
 module "cos_lite" {
-  source  = "git::https://github.com/canonical/observability-stack//terraform/cos-lite?ref=67e0cbfddea38606751fe16bc09826f6fe7d5aaf"
-  channel = var.cos_lite.channel
-  model   = data.juju_model.model.name
-  use_tls = var.cos_lite.use_tls
+  source       = "git::https://github.com/canonical/observability-stack//terraform/cos-lite?ref=8e93ea9dff7c5f31f20c3f5846bd4504502d9975"
+  channel      = var.cos_lite.channel
+  model        = data.juju_model.model.name
+  internal_tls = var.cos_lite.internal_tls
 }
 
 module "cos_registration_server" {
