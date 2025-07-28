@@ -43,3 +43,4 @@ relations:
   - [cos-registration-server:catalogue, catalogue:catalogue]
   - [cos-registration-server:auth-devices-keys,  ros2bag-fileserver:auth-devices-keys]
   - [grafana:grafana-dashboard, cos-registration-server:grafana-dashboard]
+  - [grafana:grafana-dashboard, cos-registration-server:grafana-dashboard-devices]
