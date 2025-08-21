@@ -10,9 +10,9 @@ The robotics overlay customises the upstream COS lite bundle to observe robotics
 This repository contains a collection of Terraform configurations to ease the deployment of COS for devices.
 Most notably it contains:
 
-- a Terraform module for deploying [MicroCeph](./terraform/modules/microceph/README.md)
-- a Terraform module for deploying the [rob-cos](./terraform/modules/rob-cos-overlay/README.md) overlay
-- a demonstration Terraform module for deploying a fully working [rob-cos](./terraform/dev/rob-cos/README.md) project
+- a Terraform module for deploying [MicroCeph](./terraform/microceph/README.md)
+- a Terraform module for deploying the [rob-cos](./terraform/rob-cos/README.md) overlay
+- a demonstration Terraform module for deploying a fully working [rob-cos](./terraform/rob-cos-microceph/README.md) project
 
 ### Juju bundle
 
