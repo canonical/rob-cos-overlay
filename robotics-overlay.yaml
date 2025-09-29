@@ -15,7 +15,7 @@ applications:
     series: jammy
     channel: edge
     resources:
-      caddy-fileserver-image: ghcr.io/ubuntu-robotics/ros2bag-fileserver:dev
+      caddy-fileserver-image: ghcr.io/canonical/ros2bag-fileserver:dev
     scale: 1
     constraints: arch=amd64
     storage:
@@ -27,7 +27,7 @@ applications:
     series: jammy
     channel: edge
     resources:
-      cos-registration-server-image: ghcr.io/ubuntu-robotics/cos-registration-server:dev
+      cos-registration-server-image: ghcr.io/canonical/cos-registration-server:dev
     scale: 1
     constraints: arch=amd64
     storage:
@@ -44,3 +44,5 @@ relations:
   - [cos-registration-server:auth-devices-keys,  ros2bag-fileserver:auth-devices-keys]
   - [grafana:grafana-dashboard, cos-registration-server:grafana-dashboard]
   - [grafana:grafana-dashboard, cos-registration-server:grafana-dashboard-devices]
+  - [prometheus:receive-remote-write, cos-registration-server:send-remote-write-alerts-devices]
+  - [loki:logging, cos-registration-server:logging-alerts-devices]
