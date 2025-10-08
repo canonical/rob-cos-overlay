@@ -57,6 +57,20 @@ resource "juju_integration" "grafana_dashboard_blackbox_exporter" {
   }
 }
 
+resource "juju_integration" "self_metrics_endpoint_blackbox_exporter" {
+  model = data.juju_model.model.name
+
+  application {
+    name     = module.blackbox_exporter.app_name
+    endpoint = module.blackbox_exporter.endpoints.self_metrics_endpoint
+  }
+
+  application {
+    name     = module.cos_lite.components.prometheus.app_name
+    endpoint = module.cos_lite.components.prometheus.endpoints.metrics_endpoint
+  }
+}
+
 # Provided by Catalogue
 
 resource "juju_integration" "catalogue_cos_registration_server" {
