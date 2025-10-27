@@ -27,13 +27,13 @@ terraform apply -var="model=<MODEL_NAME>"
 | Name | Version |
 |------|---------|
 | terraform | >= 1.5 |
-| juju | >= 0.14.0, < 1.0.0 |
+| juju | < 2.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| juju | >= 0.14.0, < 1.0.0 |
+| juju | < 2.0.0 |
 
 ## Resources
 
