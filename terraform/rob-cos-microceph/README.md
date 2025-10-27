@@ -44,14 +44,14 @@ We can then destroy the deployment as usual with `terraform destroy`.
 | Name | Version |
 |------|---------|
 | terraform | >= 1.5 |
-| juju | >= 0.20.0 |
+| juju | >= 0.20.0, < 1.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| juju.microceph | >= 0.20.0 |
-| juju.robcos | >= 0.20.0 |
+| juju.microceph | >= 0.20.0, < 1.0.0 |
+| juju.robcos | >= 0.20.0, < 1.0.0 |
 
 ## Modules
 
