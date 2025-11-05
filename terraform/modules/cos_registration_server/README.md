@@ -13,10 +13,17 @@ refer to the provider [documentation](https://registry.terraform.io/providers/ju
 
 Users should ensure that Terraform is aware of the `juju_model` dependency of the charm module.
 
-To deploy this module with its needed dependency, you can run:
+Example usage:
 
-```bash
-terraform apply -var="model=<MODEL_NAME>"
+```hcl
+data "juju_model" "model" {
+  name = var.model_name
+}
+
+module "cos_registration_server" {
+  source     = "./terraform/modules/cos_registration_server"
+  model_uuid = data.juju_model.model.uuid
+}
 ```
 
 <!-- BEGIN_TF_DOCS -->
@@ -25,26 +32,25 @@ terraform apply -var="model=<MODEL_NAME>"
 | Name | Version |
 |------|---------|
 | terraform | >= 1.5 |
-| juju | >= 0.14.0 |
+| juju | ~> 1.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| juju | >= 0.14.0 |
+| juju | ~> 1.0.0 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | [juju_application.cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
-| [juju_model.model](https://registry.terraform.io/providers/juju/juju/latest/docs/data-sources/model) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| model | Name of the model to deploy to (must be a K8s model) | `string` | n/a | yes |
+| model_uuid | UUID of the model to deploy to (must be a K8s model) | `string` | n/a | yes |
 | app\_name | Name to give the deployed application | `string` | `"cos-registration-server"` | no |
 | channel | Channel that the charm is deployed from | `string` | `"latest/edge"` | no |
 | config | Map of the charm configuration options | `map(string)` | `{}` | no |
