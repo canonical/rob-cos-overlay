@@ -15,7 +15,7 @@ module "blackbox_exporter" {
 }
 
 module "cos_lite" {
-  source       = "git::https://github.com/canonical/observability-stack//terraform/cos-lite?ref=ff530678e05e1936d87040d8fe7b609807129f83"
+  source       = "git::https://github.com/canonical/observability-stack//terraform/cos-lite?ref=tf-provider-v0"
   channel      = var.cos_lite.channel
   model        = data.juju_model.model.name
   internal_tls = var.cos_lite.internal_tls
