@@ -7,11 +7,11 @@ data "juju_model" "model" {
 # -------------- # Applications --------------
 
 module "blackbox_exporter" {
-  source     = "../modules/blackbox_exporter"
-  app_name   = "blackbox-exporter"
-  model_uuid = data.juju_model.model.uuid
-  channel    = var.blackbox_exporter.channel
-  revision   = var.blackbox_exporter.revision
+  source   = "git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform?ref=feat/terraform"
+  app_name = "blackbox-exporter"
+  model    = data.juju_model.model.name
+  channel  = var.blackbox_exporter.channel
+  revision = var.blackbox_exporter.revision
 }
 
 module "cos_lite" {
@@ -22,19 +22,19 @@ module "cos_lite" {
 }
 
 module "cos_registration_server" {
-  source     = "../modules/cos_registration_server"
-  app_name   = "cos-registration-server"
-  model_uuid = data.juju_model.model.uuid
-  channel    = var.cos_registration_server.channel
-  revision   = var.cos_registration_server.revision
+  source   = "git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform"
+  app_name = "cos-registration-server"
+  model    = data.juju_model.model.name
+  channel  = var.cos_registration_server.channel
+  revision = var.cos_registration_server.revision
 }
 
 module "foxglove_studio" {
-  source     = "../modules/foxglove_studio"
-  app_name   = "foxglove-studio"
-  model_uuid = data.juju_model.model.uuid
-  channel    = var.foxglove_studio.channel
-  revision   = var.foxglove_studio.revision
+  source   = "git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform"
+  app_name = "foxglove-studio"
+  model    = data.juju_model.model.name
+  channel  = var.foxglove_studio.channel
+  revision = var.foxglove_studio.revision
 }
 
 # -------------- # Offers --------------
