@@ -1,13 +1,13 @@
 variable "app_name" {
   description = "Name to give the deployed application"
   type        = string
-  default     = "microceph"
+  default     = "foxglove-studio"
 }
 
 variable "channel" {
   description = "Channel that the charm is deployed from"
   type        = string
-  default     = "squid/stable"
+  default     = "latest/edge"
 }
 
 variable "config" {
@@ -25,9 +25,8 @@ variable "constraints" {
 }
 
 variable "model_uuid" {
-  description = "UUID of the model to deploy to (must be a machine model)"
+  description = "UUID of the model to deploy to (must be a K8s model)"
   type        = string
-  nullable    = false
 }
 
 variable "revision" {
@@ -41,4 +40,18 @@ variable "units" {
   description = "Unit count/scale"
   type        = number
   default     = 1
+}
+
+variable "resources" {
+  description = "Resources used by the charm"
+  type        = map(string)
+  default = {
+    foxglove-studio-image : "ghcr.io/ubuntu-robotics/foxglove-studio:dev"
+  }
+}
+
+variable "storage" {
+  description = "Map of storage used by the application. Defaults to 1 GB, allocated by Juju"
+  type        = map(string)
+  default     = {}
 }

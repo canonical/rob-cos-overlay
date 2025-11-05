@@ -1,13 +1,13 @@
 variable "app_name" {
   description = "Name to give the deployed application"
   type        = string
-  default     = "microceph"
+  default     = "blackbox-exporter"
 }
 
 variable "channel" {
   description = "Channel that the charm is deployed from"
   type        = string
-  default     = "squid/stable"
+  default     = "1/stable"
 }
 
 variable "config" {
@@ -25,9 +25,16 @@ variable "constraints" {
 }
 
 variable "model_uuid" {
-  description = "UUID of the model to deploy to (must be a machine model)"
+  description = "UUID of the model to deploy to (must be a K8s model)"
   type        = string
-  nullable    = false
+}
+
+variable "resources" {
+  description = "Resources used by the charm"
+  type        = map(string)
+  default = {
+    blackbox-exporter-image : "ubuntu/blackbox-exporter:0.26-24.04"
+  }
 }
 
 variable "revision" {
