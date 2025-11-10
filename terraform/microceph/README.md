@@ -27,26 +27,25 @@ terraform apply -var="model=<MODEL_NAME>"
 | Name | Version |
 |------|---------|
 | terraform | >= 1.5 |
-| juju | >= 0.14.0, < 1.0.0 |
+| juju | ~> 1.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| juju | >= 0.14.0, < 1.0.0 |
+| juju | ~> 1.0.0 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | [juju_application.microceph](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/application) | resource |
-| [juju_model.model](https://registry.terraform.io/providers/juju/juju/latest/docs/data-sources/model) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| model | Name of the model to deploy to (must be a machine model) | `string` | n/a | yes |
+| model\_uuid | UUID of the model to deploy to (must be a machine model) | `string` | n/a | yes |
 | app\_name | Name to give the deployed application | `string` | `"microceph"` | no |
 | channel | Channel that the charm is deployed from | `string` | `"squid/stable"` | no |
 | config | Map of the charm configuration options | `map(string)` | `{}` | no |

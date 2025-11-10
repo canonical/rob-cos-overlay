@@ -9,22 +9,22 @@ data "juju_model" "model" {
 module "blackbox_exporter" {
   source   = "git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform?ref=feat/terraform"
   app_name = "blackbox-exporter"
-  model    = data.juju_model.model.name
+  model_uuid    = data.juju_model.model.uuid
   channel  = var.blackbox_exporter.channel
   revision = var.blackbox_exporter.revision
 }
 
 module "cos_lite" {
-  source       = "git::https://github.com/canonical/observability-stack//terraform/cos-lite?ref=tf-provider-v0"
+  source       = "git::https://github.com/canonical/observability-stack//terraform/cos-lite?ref=5f9105d3ddbb12866cb4e94b1b5b4c4ac868a2a9"
   channel      = var.cos_lite.channel
-  model        = data.juju_model.model.name
+  model_uuid   = data.juju_model.model.uuid
   internal_tls = var.cos_lite.internal_tls
 }
 
 module "cos_registration_server" {
   source   = "git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform"
   app_name = "cos-registration-server"
-  model    = data.juju_model.model.name
+  model_uuid    = data.juju_model.model.uuid
   channel  = var.cos_registration_server.channel
   revision = var.cos_registration_server.revision
 }
@@ -32,7 +32,7 @@ module "cos_registration_server" {
 module "foxglove_studio" {
   source   = "git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform"
   app_name = "foxglove-studio"
-  model    = data.juju_model.model.name
+  model_uuid    = data.juju_model.model.uuid
   channel  = var.foxglove_studio.channel
   revision = var.foxglove_studio.revision
 }
@@ -44,7 +44,7 @@ module "foxglove_studio" {
 # Provided by Blackbox Exporter
 
 resource "juju_integration" "grafana_dashboard_blackbox_exporter" {
-  model = data.juju_model.model.name
+  model_uuid = data.juju_model.model.uuid
 
   application {
     name     = module.blackbox_exporter.app_name
@@ -58,7 +58,7 @@ resource "juju_integration" "grafana_dashboard_blackbox_exporter" {
 }
 
 resource "juju_integration" "self_metrics_endpoint_blackbox_exporter" {
-  model = data.juju_model.model.name
+  model_uuid = data.juju_model.model.uuid
 
   application {
     name     = module.blackbox_exporter.app_name
@@ -74,7 +74,7 @@ resource "juju_integration" "self_metrics_endpoint_blackbox_exporter" {
 # Provided by Catalogue
 
 resource "juju_integration" "catalogue_cos_registration_server" {
-  model = data.juju_model.model.name
+  model_uuid = data.juju_model.model.uuid
 
   application {
     name     = module.cos_lite.components.catalogue.app_name
@@ -88,7 +88,7 @@ resource "juju_integration" "catalogue_cos_registration_server" {
 }
 
 resource "juju_integration" "catalogue_foxglove_studio" {
-  model = data.juju_model.model.name
+  model_uuid = data.juju_model.model.uuid
 
   application {
     name     = module.cos_lite.components.catalogue.app_name
@@ -102,7 +102,7 @@ resource "juju_integration" "catalogue_foxglove_studio" {
 }
 
 resource "juju_integration" "catalogue_blackbox_exporter" {
-  model = data.juju_model.model.name
+  model_uuid = data.juju_model.model.uuid
 
   application {
     name     = module.cos_lite.components.catalogue.app_name
@@ -118,7 +118,7 @@ resource "juju_integration" "catalogue_blackbox_exporter" {
 # Provided by COS registration server
 
 resource "juju_integration" "grafana_dashboard_devices_cos_registration_server" {
-  model = data.juju_model.model.name
+  model_uuid = data.juju_model.model.uuid
 
   application {
     name     = module.cos_registration_server.app_name
@@ -132,7 +132,7 @@ resource "juju_integration" "grafana_dashboard_devices_cos_registration_server" 
 }
 
 resource "juju_integration" "probes_devices_cos_registration_server" {
-  model = data.juju_model.model.name
+  model_uuid = data.juju_model.model.uuid
 
   application {
     name     = module.cos_registration_server.app_name
@@ -148,7 +148,7 @@ resource "juju_integration" "probes_devices_cos_registration_server" {
 # Provided by Loki
 
 resource "juju_integration" "logging_alert_devices_cos_registration_server" {
-  model = data.juju_model.model.name
+  model_uuid = data.juju_model.model.uuid
 
   application {
     name     = module.cos_lite.components.loki.app_name
@@ -164,7 +164,7 @@ resource "juju_integration" "logging_alert_devices_cos_registration_server" {
 # Provided by Prometheus
 
 resource "juju_integration" "send_remote_write_alerts_devices_cos_registration_server" {
-  model = data.juju_model.model.name
+  model_uuid = data.juju_model.model.uuid
 
   application {
     name     = module.cos_lite.components.prometheus.app_name
@@ -180,7 +180,7 @@ resource "juju_integration" "send_remote_write_alerts_devices_cos_registration_s
 # Provided by Traefik
 
 resource "juju_integration" "ingress_blackbox_exporter" {
-  model = data.juju_model.model.name
+  model_uuid = data.juju_model.model.uuid
 
   application {
     name     = module.cos_lite.components.traefik.app_name
@@ -194,7 +194,7 @@ resource "juju_integration" "ingress_blackbox_exporter" {
 }
 
 resource "juju_integration" "ingress_cos_registration_server" {
-  model = data.juju_model.model.name
+  model_uuid = data.juju_model.model.uuid
 
   application {
     name     = module.cos_lite.components.traefik.app_name
@@ -208,7 +208,7 @@ resource "juju_integration" "ingress_cos_registration_server" {
 }
 
 resource "juju_integration" "ingress_foxglove_studio" {
-  model = data.juju_model.model.name
+  model_uuid = data.juju_model.model.uuid
 
   application {
     name     = module.cos_lite.components.traefik.app_name

@@ -25,20 +25,20 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 | Name | Version |
 |------|---------|
 | terraform | >= 1.5 |
-| juju | >= 0.14.0, < 1.0.0 |
+| juju | ~> 1.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| juju | >= 0.14.0, < 1.0.0 |
+| juju | ~> 1.0.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
 | blackbox\_exporter | git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform | feat/terraform |
-| cos\_lite | git::https://github.com/canonical/observability-stack//terraform/cos-lite | tf-provider-v0 |
+| cos\_lite | git::https://github.com/canonical/observability-stack//terraform/cos-lite | 5f9105d3ddbb12866cb4e94b1b5b4c4ac868a2a9 |
 | cos\_registration\_server | git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform | n/a |
 | foxglove\_studio | git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform | n/a |
 
