@@ -1,18 +1,18 @@
 # -------------- # Models --------------
 
 data "juju_model" "model" {
-  name = var.model
+  name  = var.model
   owner = var.owner
 }
 
 # -------------- # Applications --------------
 
 module "blackbox_exporter" {
-  source   = "git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform?ref=59bb50b8c41712499ad4071726160f0fed7cb232"
-  app_name = "blackbox-exporter"
-  model_uuid    = data.juju_model.model.uuid
-  channel  = var.blackbox_exporter.channel
-  revision = var.blackbox_exporter.revision
+  source     = "git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform?ref=59bb50b8c41712499ad4071726160f0fed7cb232"
+  app_name   = "blackbox-exporter"
+  model_uuid = data.juju_model.model.uuid
+  channel    = var.blackbox_exporter.channel
+  revision   = var.blackbox_exporter.revision
 }
 
 module "cos_lite" {
@@ -23,19 +23,19 @@ module "cos_lite" {
 }
 
 module "cos_registration_server" {
-  source   = "git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform?ref=958d42adbcad63b13a2d8868cdb4be29bffe6f75"
-  app_name = "cos-registration-server"
-  model_uuid    = data.juju_model.model.uuid
-  channel  = var.cos_registration_server.channel
-  revision = var.cos_registration_server.revision
+  source     = "git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform?ref=958d42adbcad63b13a2d8868cdb4be29bffe6f75"
+  app_name   = "cos-registration-server"
+  model_uuid = data.juju_model.model.uuid
+  channel    = var.cos_registration_server.channel
+  revision   = var.cos_registration_server.revision
 }
 
 module "foxglove_studio" {
-  source   = "git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform?ref=6580eabf7d7d396fd089e637c4d1bb3052cec1ad"
-  app_name = "foxglove-studio"
-  model_uuid    = data.juju_model.model.uuid
-  channel  = var.foxglove_studio.channel
-  revision = var.foxglove_studio.revision
+  source     = "git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform?ref=6580eabf7d7d396fd089e637c4d1bb3052cec1ad"
+  app_name   = "foxglove-studio"
+  model_uuid = data.juju_model.model.uuid
+  channel    = var.foxglove_studio.channel
+  revision   = var.foxglove_studio.revision
 }
 
 # -------------- # Offers --------------
