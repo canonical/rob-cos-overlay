@@ -41,13 +41,13 @@ module "rob_cos" {
 }
 
 module "microceph" {
-  source   = "../microceph"
-  app_name = "microceph"
-  model    = data.juju_model.microceph_model.name
-  channel  = var.microceph.channel
-  revision = var.microceph.revision
-  units    = var.microceph.units
-  config   = { "enable-rgw" = "*" }
+  source     = "../microceph"
+  app_name   = "microceph"
+  model_uuid = data.juju_model.microceph_model.uuid
+  channel    = var.microceph.channel
+  revision   = var.microceph.revision
+  units      = var.microceph.units
+  config     = { "enable-rgw" = "*" }
 
   providers = {
     juju = juju.microceph
@@ -57,7 +57,7 @@ module "microceph" {
 # -------------- # Offers --------------
 
 resource "juju_offer" "microceph" {
-  model            = data.juju_model.microceph_model.name
+  model_uuid       = data.juju_model.microceph_model.uuid
   application_name = module.microceph.app_name
   endpoints        = [module.microceph.requires.traefik_route_rgw]
 
@@ -69,7 +69,7 @@ resource "juju_offer" "microceph" {
 # Provided by Traefik
 
 resource "juju_integration" "ingress_microceph" {
-  model = data.juju_model.robcos_model.name
+  model_uuid = data.juju_model.robcos_model.uuid
 
   application {
     name     = module.rob_cos.components.traefik.app_name

@@ -4,6 +4,13 @@ variable "model" {
   nullable    = false
 }
 
+variable "owner" {
+  description = "The owner of the model to deploy to"
+  type        = string
+  default     = "admin"
+  nullable    = false
+}
+
 variable "blackbox_exporter" {
   type = object({
     channel  = optional(string, "1/stable")
