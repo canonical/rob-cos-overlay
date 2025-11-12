@@ -2,7 +2,7 @@
 
 data "juju_model" "model" {
   name = var.model
-  owner = "admin"
+  owner = var.owner
 }
 
 # -------------- # Applications --------------
