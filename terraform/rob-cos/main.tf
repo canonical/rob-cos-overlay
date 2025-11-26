@@ -8,7 +8,7 @@ data "juju_model" "model" {
 # -------------- # Applications --------------
 
 module "blackbox_exporter" {
-  source     = "git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform?ref=59bb50b8c41712499ad4071726160f0fed7cb232"
+  source     = "git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform?ref=feat/terraform"
   app_name   = "blackbox-exporter"
   model_uuid = data.juju_model.model.uuid
   channel    = var.blackbox_exporter.channel
@@ -16,14 +16,14 @@ module "blackbox_exporter" {
 }
 
 module "cos_lite" {
-  source       = "git::https://github.com/canonical/observability-stack//terraform/cos-lite?ref=5f9105d3ddbb12866cb4e94b1b5b4c4ac868a2a9"
+  source       = "git::https://github.com/canonical/observability-stack//terraform/cos-lite"
   channel      = var.cos_lite.channel
   model_uuid   = data.juju_model.model.uuid
   internal_tls = var.cos_lite.internal_tls
 }
 
 module "cos_registration_server" {
-  source     = "git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform?ref=958d42adbcad63b13a2d8868cdb4be29bffe6f75"
+  source     = "git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform"
   app_name   = "cos-registration-server"
   model_uuid = data.juju_model.model.uuid
   channel    = var.cos_registration_server.channel
@@ -31,7 +31,7 @@ module "cos_registration_server" {
 }
 
 module "foxglove_studio" {
-  source     = "git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform?ref=6580eabf7d7d396fd089e637c4d1bb3052cec1ad"
+  source     = "git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform"
   app_name   = "foxglove-studio"
   model_uuid = data.juju_model.model.uuid
   channel    = var.foxglove_studio.channel
