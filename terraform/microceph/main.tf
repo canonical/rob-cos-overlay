@@ -1,3 +1,9 @@
+# -------------- # Models --------------
+
+data "juju_model" "model" {
+  uuid = var.model_uuid
+}
+
 # -------------- # Application --------------
 
 resource "juju_application" "microceph" {
