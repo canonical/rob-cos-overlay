@@ -1,7 +1,7 @@
 # -------------- # Model --------------
 
 data "juju_model" "model" {
-  name = var.model
+  uuid = var.model_uuid
 }
 
 # -------------- # Application --------------
