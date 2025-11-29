@@ -1,11 +1,11 @@
-variable "robcos_model" {
-  description = "Name of the K8s model to deploy rob-cos to"
+variable "robcos_model_uuid" {
+  description = "UUID of the K8s model to deploy rob-cos to"
   type        = string
   nullable    = false
 }
 
-variable "microceph_model" {
-  description = "Name of the machine model to deploy MicroCeph to"
+variable "microceph_model_uuid" {
+  description = "UUID of the machine model to deploy MicroCeph to"
   type        = string
   nullable    = false
 }
