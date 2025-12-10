@@ -4,7 +4,7 @@ variable "model" {
   nullable    = false
 }
 
-variable "owner" {
+variable "model_owner" {
   description = "The owner of the model to deploy to"
   type        = string
   default     = "admin"

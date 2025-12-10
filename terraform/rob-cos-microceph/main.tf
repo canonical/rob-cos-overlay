@@ -19,12 +19,12 @@ provider "juju" {
 # -------------- # Models --------------
 
 data "juju_model" "robcos_model" {
-  name     = var.robcos_model
+  uuid     = var.robcos_model_uuid
   provider = juju.robcos
 }
 
 data "juju_model" "microceph_model" {
-  name     = var.microceph_model
+  uuid     = var.microceph_model_uuid
   provider = juju.microceph
 }
 

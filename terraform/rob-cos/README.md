@@ -69,7 +69,7 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 | cos\_lite | The cos-lite variables. Please refer to the module for more information. | ```object({ channel = optional(string, "1/stable") internal_tls = optional(bool, false) })``` | `{}` | no |
 | cos\_registration\_server | The cos-registration-server variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
 | foxglove\_studio | The foxglove-studio variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
-| owner | The owner of the model to deploy to | `string` | `"admin"` | no |
+| model\_owner | The owner of the model to deploy to | `string` | `"admin"` | no |
 
 ## Outputs
 
