@@ -65,10 +65,10 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | model | Name of the model to deploy to (must be a K8s model) | `string` | n/a | yes |
-| blackbox\_exporter | The blackbox-exporter variables. Please refer to the module for more information. | ```object({ channel = optional(string, "1/stable") revision = optional(number) })``` | `{}` | no |
-| cos\_lite | The cos-lite variables. Please refer to the module for more information. | ```object({ channel = optional(string, "1/stable") internal_tls = optional(bool, false) })``` | `{}` | no |
-| cos\_registration\_server | The cos-registration-server variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
-| foxglove\_studio | The foxglove-studio variables. Please refer to the module for more information. | ```object({ channel = optional(string, "latest/edge") revision = optional(number, null) })``` | `{}` | no |
+| blackbox\_exporter | Application configuration for Blackbox Exporter. For more details: https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator/tree/feat/terraform/terraform | ```object({ app_name = optional(string, "blackbox-exporter") channel = optional(string, "1/stable") config = optional(map(string), {}) constraints = optional(string, "arch = amd64") revision = optional(number, null) units = optional(number, 1) })``` | `{}` | no |
+| cos\_lite | Applications configurations for COS Lite. For more details: https://github.com/canonical/observability-stack/tree/main/terraform/cos-lite | ```object({ channel = optional(string, "1/stable") internal_tls = optional(bool, false) })``` | `{}` | no |
+| cos\_registration\_server | Application configuration for COS Registration Server. For more details: https://github.com/ubuntu-robotics/cos-registration-server-k8s-operator/tree/main/terraform | ```object({ app_name = optional(string, "cos-registration-server") channel = optional(string, "latest/edge") config = optional(map(string), {}) constraints = optional(string, "arch = amd64") revision = optional(number, null) storage_directives = optional(map(string), {}) units = optional(number, 1) })``` | `{}` | no |
+| foxglove\_studio | Application configuration for Foxglove Studio. For more details: https://github.com/ubuntu-robotics/foxglove-k8s-operator/tree/main/terraform | ```object({ app_name = optional(string, "foxglove-studio") channel = optional(string, "latest/edge") config = optional(map(string), {}) constraints = optional(string, "arch = amd64") revision = optional(number, null) storage_directives = optional(map(string), {}) units = optional(number, 1) })``` | `{}` | no |
 | model\_owner | The owner of the model to deploy to | `string` | `"admin"` | no |
 
 ## Outputs
