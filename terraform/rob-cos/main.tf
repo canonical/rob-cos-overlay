@@ -8,11 +8,14 @@ data "juju_model" "model" {
 # -------------- # Applications --------------
 
 module "blackbox_exporter" {
-  source     = "git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform?ref=feat/terraform"
-  app_name   = "blackbox-exporter"
-  model_uuid = data.juju_model.model.uuid
-  channel    = var.blackbox_exporter.channel
-  revision   = var.blackbox_exporter.revision
+  app_name    = var.blackbox_exporter.app_name
+  channel     = var.blackbox_exporter.channel
+  config      = var.blackbox_exporter.config
+  constraints = var.blackbox_exporter.constraints
+  model_uuid  = data.juju_model.model.uuid
+  revision    = var.blackbox_exporter.revision
+  source      = "git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform?ref=feat/terraform"
+  units       = var.blackbox_exporter.units
 }
 
 module "cos_lite" {
@@ -23,19 +26,27 @@ module "cos_lite" {
 }
 
 module "cos_registration_server" {
-  source     = "git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform"
-  app_name   = "cos-registration-server"
-  model_uuid = data.juju_model.model.uuid
-  channel    = var.cos_registration_server.channel
-  revision   = var.cos_registration_server.revision
+  app_name           = var.cos_registration_server.app_name
+  channel            = var.cos_registration_server.channel
+  config             = var.cos_registration_server.config
+  constraints        = var.cos_registration_server.constraints
+  model_uuid         = data.juju_model.model.uuid
+  storage_directives = var.cos_registration_server.storage_directives
+  revision           = var.cos_registration_server.revision
+  source             = "git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform"
+  units              = var.cos_registration_server.units
 }
 
 module "foxglove_studio" {
-  source     = "git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform"
-  app_name   = "foxglove-studio"
-  model_uuid = data.juju_model.model.uuid
-  channel    = var.foxglove_studio.channel
-  revision   = var.foxglove_studio.revision
+  app_name           = var.foxglove_studio.app_name
+  channel            = var.foxglove_studio.channel
+  config             = var.foxglove_studio.config
+  constraints        = var.foxglove_studio.constraints
+  model_uuid         = data.juju_model.model.uuid
+  storage_directives = var.foxglove_studio.storage_directives
+  revision           = var.foxglove_studio.revision
+  source             = "git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform"
+  units              = var.foxglove_studio.units
 }
 
 # -------------- # Offers --------------
