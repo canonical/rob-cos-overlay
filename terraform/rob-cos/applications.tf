@@ -19,7 +19,7 @@ module "blackbox_exporter" {
 }
 
 module "cos_lite" {
-  source       = "git::https://github.com/canonical/observability-stack//terraform/cos-lite"
+  source       = "git::https://github.com/canonical/observability-stack//terraform/cos-lite?ref=track/2"
   channel      = var.cos_lite.channel
   model_uuid   = data.juju_model.model.uuid
   internal_tls = var.cos_lite.internal_tls
@@ -33,7 +33,7 @@ module "cos_registration_server" {
   model_uuid         = data.juju_model.model.uuid
   storage_directives = var.cos_registration_server.storage_directives
   revision           = var.cos_registration_server.revision
-  source             = "git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform"
+  source             = "git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform?ref=track/0"
   units              = var.cos_registration_server.units
 }
 
@@ -45,6 +45,6 @@ module "foxglove_studio" {
   model_uuid         = data.juju_model.model.uuid
   storage_directives = var.foxglove_studio.storage_directives
   revision           = var.foxglove_studio.revision
-  source             = "git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform"
+  source             = "git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform?ref=track/0"
   units              = var.foxglove_studio.units
 }

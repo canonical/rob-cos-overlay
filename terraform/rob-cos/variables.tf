@@ -42,7 +42,7 @@ variable "cos_lite" {
 variable "cos_registration_server" {
   type = object({
     app_name           = optional(string, "cos-registration-server")
-    channel            = optional(string, "latest/edge")
+    channel            = optional(string, "0/stable")
     config             = optional(map(string), {})
     constraints        = optional(string, "arch=amd64")
     revision           = optional(number, null)
@@ -59,7 +59,7 @@ variable "cos_registration_server" {
 variable "foxglove_studio" {
   type = object({
     app_name           = optional(string, "foxglove-studio")
-    channel            = optional(string, "latest/edge")
+    channel            = optional(string, "0/stable")
     config             = optional(map(string), {})
     constraints        = optional(string, "arch=amd64")
     revision           = optional(number, null)
