@@ -13,12 +13,12 @@ variable "model_owner" {
 
 variable "blackbox_exporter" {
   type = object({
-    app_name           = optional(string, "blackbox-exporter")
-    channel            = optional(string, "1/stable")
-    config             = optional(map(string), {})
-    constraints        = optional(string, "arch=amd64")
-    revision           = optional(number, null)
-    units              = optional(number, 1)
+    app_name    = optional(string, "blackbox-exporter")
+    channel     = optional(string, "1/stable")
+    config      = optional(map(string), {})
+    constraints = optional(string, "arch=amd64")
+    revision    = optional(number, null)
+    units       = optional(number, 1)
   })
   default     = {}
   description = <<-EOT
