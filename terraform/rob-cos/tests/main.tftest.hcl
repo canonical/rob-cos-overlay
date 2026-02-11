@@ -71,6 +71,6 @@ run "basic_deploy" {
   # We do not deploy ssc by default
   assert {
     condition     = contains(keys(module.rob_cos.app_names), "ssc") == false
-    error_message = "cos-lite ssc app_name should be set"
+    error_message = "cos-lite ssc app_name should not be present by default"
   }
 }
