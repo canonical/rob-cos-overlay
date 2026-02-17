@@ -4,7 +4,7 @@ run "basic_deploy" {
   # This corresponds to the apps deployed by rob_cos.
   # cos_lite tf module doesn't output app_names.
   assert {
-    condition     = length(module.rob_cos.app_names) == 3
+    condition     = length(module.rob_cos.app_names) == 4
     error_message = "app_names output should not be empty"
   }
 
@@ -21,6 +21,11 @@ run "basic_deploy" {
   assert {
     condition     = contains(keys(module.rob_cos.app_names), "foxglove_studio")
     error_message = "app_names is missing foxglove_studio"
+  }
+
+  assert {
+    condition     = contains(keys(module.rob_cos.app_names), "postgresql")
+    error_message = "app_names is missing postgresql"
   }
 
   assert {
@@ -66,6 +71,11 @@ run "basic_deploy" {
   assert {
     condition     = module.rob_cos.components.traefik.app_name != ""
     error_message = "cos-lite traefik app_name should be set"
+  }
+
+  assert {
+    condition     = module.rob_cos.components.postgresql.app_name != ""
+    error_message = "cos-lite postgresql app_name should be set"
   }
 
   # We do not deploy ssc by default
