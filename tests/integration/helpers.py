@@ -93,6 +93,14 @@ def get_tls_context(
     return ctx
 
 
+def blackbox_catalogue_ingress_fix(juju: jubilant.Juju):
+    # FIXME: https://github.com/canonical/blackbox-exporter-k8s-operator/issues/74
+    juju.remove_relation("blackbox-exporter:catalogue", "catalogue:catalogue")
+    wait_for_active_idle_without_error([juju])
+    juju.integrate("blackbox-exporter:catalogue", "catalogue:catalogue")
+    wait_for_active_idle_without_error([juju])
+
+
 def catalogue_apps_are_reachable(
     juju: jubilant.Juju, tls_context: Optional[ssl.SSLContext] = None
 ):
