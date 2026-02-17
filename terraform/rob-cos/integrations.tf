@@ -118,6 +118,20 @@ resource "juju_integration" "logging_alert_devices_cos_registration_server" {
   }
 }
 
+resource "juju_integration" "logging_postgresql" {
+  model_uuid = data.juju_model.model.uuid
+
+  application {
+    name     = module.cos_lite.components.loki.app_name
+    endpoint = module.cos_lite.components.loki.endpoints.logging
+  }
+
+  application {
+    name     = module.postgresql.app_name
+    endpoint = module.postgresql.requires.logging
+  }
+}
+
 # Provided by Prometheus
 
 resource "juju_integration" "send_remote_write_alerts_devices_cos_registration_server" {
@@ -131,6 +145,50 @@ resource "juju_integration" "send_remote_write_alerts_devices_cos_registration_s
   application {
     name     = module.cos_registration_server.app_name
     endpoint = module.cos_registration_server.requires.send_remote_write_alerts_devices
+  }
+}
+
+# Provided by Postgresql
+
+resource "juju_integration" "database_cos_registration_server" {
+  model_uuid = data.juju_model.model.uuid
+
+  application {
+    name     = module.postgresql.app_name
+    endpoint = module.postgresql.provides.database
+  }
+
+  application {
+    name     = module.cos_registration_server.app_name
+    endpoint = module.cos_registration_server.requires.database
+  }
+}
+
+resource "juju_integration" "metrics_database" {
+  model_uuid = data.juju_model.model.uuid
+
+  application {
+    name     = module.postgresql.app_name
+    endpoint = module.postgresql.provides.metrics_endpoint
+  }
+
+  application {
+    name     = module.cos_lite.components.prometheus.app_name
+    endpoint = module.cos_lite.components.prometheus.endpoints.metrics_endpoint
+  }
+}
+
+resource "juju_integration" "grafana_dashboard_database" {
+  model_uuid = data.juju_model.model.uuid
+
+  application {
+    name     = module.postgresql.app_name
+    endpoint = module.postgresql.provides.grafana_dashboard
+  }
+
+  application {
+    name     = module.cos_lite.components.grafana.app_name
+    endpoint = module.cos_lite.components.grafana.endpoints.grafana_dashboard
   }
 }
 

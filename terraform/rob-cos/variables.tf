@@ -56,6 +56,25 @@ variable "cos_registration_server" {
   EOT
 }
 
+variable "postgresql" {
+  type = object({
+    app_name           = optional(string, "postgresql")
+    channel            = optional(string, "14/stable")
+    config             = optional(map(string), {})
+    constraints        = optional(string, "arch=amd64")
+    revision           = optional(number, null)
+    storage_directives = optional(map(string), { pgdata = "10G" })
+    units              = optional(number, 1)
+    base               = optional(string, "ubuntu@22.04")
+    resources          = optional(map(string), {})
+  })
+  default     = {}
+  description = <<-EOT
+  Application configuration for postgreysql-k8s-operator
+  For more details: https://github.com/canonical/postgresql-k8s-operator/blob/main/terraform/variables.tf
+  EOT
+}
+
 variable "foxglove_studio" {
   type = object({
     app_name           = optional(string, "foxglove-studio")

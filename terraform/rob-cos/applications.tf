@@ -37,6 +37,19 @@ module "cos_registration_server" {
   units              = var.cos_registration_server.units
 }
 
+module "postgresql" {
+  source             = "git::https://github.com/canonical/postgresql-k8s-operator//terraform?ref=986f614b9e437cb69f8ad0d51a1d03d0225033a3"
+  model_uuid         = data.juju_model.model.uuid
+  channel            = var.postgresql.channel
+  config             = var.postgresql.config
+  constraints        = var.postgresql.constraints
+  revision           = var.postgresql.revision
+  storage_directives = var.postgresql.storage_directives
+  units              = var.postgresql.units
+  base               = var.postgresql.base
+  resources          = var.postgresql.resources
+}
+
 module "foxglove_studio" {
   app_name           = var.foxglove_studio.app_name
   channel            = var.foxglove_studio.channel
