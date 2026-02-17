@@ -70,7 +70,7 @@ variable "postgresql" {
   })
   default     = {}
   description = <<-EOT
-  Application configuration for postgreysql-k8s-operator
+  Application configuration for postgresql-k8s-operator
   For more details: https://github.com/canonical/postgresql-k8s-operator/blob/main/terraform/variables.tf
   EOT
 }
