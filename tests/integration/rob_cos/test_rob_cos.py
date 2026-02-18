@@ -23,12 +23,13 @@ def test_update_track(tf_manager, cos_model: jubilant.Juju):
     cos_model.remove_relation(
         "catalogue:catalogue", "cos-registration-server:catalogue"
     )
+    cos_lite_channel = {"cos_lite": {"channel": "1/candidate"}}
     wait_for_active_idle_without_error([cos_model])
     tf_manager.init(TRACK_LATEST_TF_FILE)
     tf_manager.apply(
         model=cos_model.model,
         target=None,
-        cos_lite="{\"channel\": \"1/candidate\"}",
+        **cos_lite_channel,
     )
 
     wait_for_active_idle_without_error([cos_model])

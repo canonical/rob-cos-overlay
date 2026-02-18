@@ -1,14 +1,59 @@
+from contextlib import contextmanager
 import json
 import os
 import shlex
 import shutil
 import ssl
 import subprocess
+import contextlib
 from pathlib import Path
-from typing import List, Optional
+from typing import Generator, List, Optional
 from urllib.request import urlopen
+import logging
+from collections.abc import Mapping
 
 import jubilant
+
+logger = logging.getLogger(__name__)
+
+
+@contextlib.contextmanager
+def temp_named_model(
+    name: str,
+    keep: bool = False,
+    controller: str | None = None,
+    cloud: str | None = None,
+    config: Mapping[str, jubilant._juju.ConfigValue] | None = None,
+    credential: str | None = None,
+) -> Generator[jubilant.Juju, None, None]:
+    juju = jubilant.Juju()
+    juju.add_model(
+        name, cloud=cloud, controller=controller, config=config, credential=credential
+    )
+    try:
+        yield juju
+    finally:
+        if not keep:
+            assert juju.model is not None
+            try:
+                # We're not using juju.destroy_model() here, as Juju doesn't provide a way
+                # to specify the timeout for the entire model destruction operation.
+                args = [
+                    "destroy-model",
+                    juju.model,
+                    "--no-prompt",
+                    "--destroy-storage",
+                    "--force",
+                ]
+                juju._cli(*args, include_model=False, timeout=10 * 60)
+                juju.model = None
+            except subprocess.TimeoutExpired as exc:
+                logger.error(
+                    "timeout destroying model: %s\nStdout:\n%s\nStderr:\n%s",
+                    exc,
+                    exc.stdout,
+                    exc.stderr,
+                )
 
 
 class TfDirManager:
@@ -34,7 +79,7 @@ class TfDirManager:
     @staticmethod
     def _args_str(target: Optional[str] = None, **kwargs) -> str:
         target_arg = f"-target module.{target}" if target else ""
-        var_args = " ".join(f"-var {k}={v}" for k, v in kwargs.items())
+        var_args = " ".join(f"-var '{k}={v}'" for k, v in kwargs.items())
         return "-auto-approve " + f"{target_arg} " + var_args
 
     def apply(self, target: Optional[str] = None, **kwargs):

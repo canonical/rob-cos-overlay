@@ -7,20 +7,20 @@ import os
 
 import jubilant
 import pytest
-from helpers import TfDirManager
+from helpers import TfDirManager, temp_named_model
 
 
 @pytest.fixture(scope="module")
 def ca_model():
     keep_models: bool = os.environ.get("KEEP_MODELS") is not None
-    with jubilant.temp_model(keep=keep_models) as juju:
+    with temp_named_model(name="ca", keep=keep_models) as juju:
         yield juju
 
 
 @pytest.fixture(scope="module")
 def cos_model():
     keep_models: bool = os.environ.get("KEEP_MODELS") is not None
-    with jubilant.temp_model(keep=keep_models, cloud="microk8s") as juju:
+    with temp_named_model(name="rob-cos", keep=keep_models, cloud="microk8s") as juju:
         yield juju
 
 
