@@ -79,7 +79,16 @@ class TfDirManager:
     @staticmethod
     def _args_str(target: Optional[str] = None, **kwargs) -> str:
         target_arg = f"-target module.{target}" if target else ""
-        var_args = " ".join(f"-var '{k}={v}'" for k, v in kwargs.items())
+        var_args_list = []
+        for key, value in kwargs.items():
+            if isinstance(value, (dict, list)):
+                rendered = json.dumps(value, separators=(",", ":"))
+            elif isinstance(value, bool):
+                rendered = "true" if value else "false"
+            else:
+                rendered = str(value)
+            var_args_list.append(f"-var {shlex.quote(f'{key}={rendered}')}")
+        var_args = " ".join(var_args_list)
         return "-auto-approve " + f"{target_arg} " + var_args
 
     def apply(self, target: Optional[str] = None, **kwargs):
