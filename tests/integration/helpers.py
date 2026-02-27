@@ -11,10 +11,33 @@ from typing import Generator, List, Optional
 from urllib.request import urlopen
 import logging
 from collections.abc import Mapping
+from tenacity import retry, stop_after_delay, wait_fixed, retry_if_exception_type
 
 import jubilant
 
 logger = logging.getLogger(__name__)
+
+
+class Retry(Exception):
+    """Exception raised when we should retry"""
+
+
+retry_for_10m = retry(stop=stop_after_delay(60 * 10), wait=wait_fixed(5))
+
+
+def ros_domain_cloud_init_config(domain_id: int = 6) -> str:
+    return (
+        "#cloud-config\n"
+        "write_files:\n"
+        "  - path: /etc/systemd/system.conf.d/10-ros-domain.conf\n"
+        "    content: |\n"
+        "      [Manager]\n"
+        f'      DefaultEnvironment="ROS_DOMAIN_ID={domain_id}"\n'
+        "  - path: /etc/environment\n"
+        "    content: |\n"
+        f"      ROS_DOMAIN_ID={domain_id}\n"
+        "    append: true\n"
+    )
 
 
 @contextlib.contextmanager

@@ -20,7 +20,7 @@ def ca_model():
 @pytest.fixture(scope="module")
 def cos_model():
     keep_models: bool = os.environ.get("KEEP_MODELS") is not None
-    with temp_named_model(name="rob-cos", keep=keep_models, cloud="microk8s") as juju:
+    with temp_named_model(name="cos-rob", keep=keep_models, cloud="microk8s") as juju:
         yield juju
 
 
