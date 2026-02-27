@@ -38,19 +38,19 @@ def temp_lxd_vm(lxc, request):
         *,
         name: str,
         image_alias: str,
+        cloud_init: str | None = None,
         cpus: int = 2,
         memory: int = 4,
         disk: int = 10,
-        additional_arguments: str = "",
     ) -> LXDInstance:
         launch_ubuntu_core_vm(
             lxc,
             name=name,
             image_alias=image_alias,
+            cloud_init=cloud_init,
             cpus=cpus,
             memory=memory,
             disk=disk,
-            additional_arguments=additional_arguments,
         )
         instance = LXDInstance(
             name=name,
@@ -174,12 +174,15 @@ def launch_ubuntu_core_vm(
     lxc: LXC,
     name: str,
     image_alias: str,
+    cloud_init: str | None = None,
     cpus: int = 4,
     memory: int = 8,
     disk: int = 20,
-    additional_arguments: str = "",
 ):
     """Launch an Ubuntu Core VM with CPU, memory, and disk limits."""
+    config_args = []
+    if cloud_init:
+        config_args.extend(["-c", f"user.user-data={cloud_init}"])
     lxc._run_lxc(
         [
             "launch",
@@ -196,6 +199,6 @@ def launch_ubuntu_core_vm(
             f"limits.memory={memory}GiB",
             "-d",
             f"root,size={disk}GiB",
-            additional_arguments,
         ]
+        + config_args
     )

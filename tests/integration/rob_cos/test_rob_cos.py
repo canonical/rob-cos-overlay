@@ -1,6 +1,4 @@
 from pathlib import Path
-import subprocess
-import time
 
 import pytest
 import requests
@@ -12,6 +10,12 @@ from helpers import (
     retry_for_10m,
     Retry,
     ros_domain_cloud_init_config,
+    trigger_update_status,
+)
+
+from ros2 import (
+    ensure_snapd_service_list_contains,
+    ensure_snapd_service_started,
 )
 
 from craft_providers.lxd.lxd_instance import LXDInstance
@@ -48,52 +52,29 @@ def test_update_track(tf_manager, cos_model: jubilant.Juju):
     catalogue_apps_are_reachable(cos_model)
 
 
-def test_one_robot(
+def test_deploy_one_robot(
     cos_model: jubilant.Juju, ubuntu_core_image: str, temp_lxd_vm: LXDInstance
 ):
     robot_1 = temp_lxd_vm(
         name="tb3-robot-1",
         image_alias=ubuntu_core_image,
-        additional_arguments=f'-c user.user-data="{ros_domain_cloud_init_config(1)}"',
+        cloud_init=ros_domain_cloud_init_config(1),
     )
     service_name = "cos-registration-agent.register-device"
 
     @retry_for_10m
     def cos_registration_agent_available(ros_domain_id: int = 0):
-        result = subprocess.run(
-            [
-                f"ROS_DOMAIN_ID={ros_domain_id}",
-                "ros2",
-                "service",
-                "call",
-                "/ros2_snapd/list",
-                "ros2_snapd/srv/SnapdList",
-            ],
-            check=False,
-            capture_output=True,
-            text=True,
+        ensure_snapd_service_list_contains(
+            service_name,
+            ros_domain_id=ros_domain_id,
         )
-        if service_name not in result.stdout:
-            raise Retry
 
     @retry_for_10m
     def register_device(ros_domain_id: int = 0):
-        result = subprocess.run(
-            [
-                f"ROS_DOMAIN_ID={ros_domain_id}",
-                "ros2",
-                "service",
-                "call",
-                "/ros2_snapd/start",
-                "ros2_snapd/srv/SnapdStart",
-                "service: 'cos-registration-agent.register-device'",
-            ],
-            check=True,
-            capture_output=True,
-            text=True,
+        ensure_snapd_service_started(
+            service_name,
+            ros_domain_id=ros_domain_id,
         )
-        if "success=True" not in result.stdout:
-            raise Retry
 
     @retry_for_10m
     def assert_device():
@@ -114,3 +95,5 @@ def test_one_robot(
     cos_registration_agent_available(ros_domain_id=1)
     register_device(ros_domain_id=1)
     assert_device()
+
+    trigger_update_status(cos_model, "cos-registration-server/0")

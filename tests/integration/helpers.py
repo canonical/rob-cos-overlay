@@ -189,3 +189,13 @@ def catalogue_apps_are_reachable(
             continue
         response = urlopen(url, data=None, timeout=2.0, context=tls_context)
         assert response.code == 200, f"{app} was not reachable"
+
+
+def trigger_update_status(juju: jubilant.Juju, unit: str) -> None:
+    juju._cli(
+        "run",
+        "--unit",
+        unit,
+        "--hook",
+        "update-status",
+    )
