@@ -5,9 +5,9 @@
 
 import os
 
-import jubilant
 import pytest
-from helpers import TfDirManager, temp_named_model
+from terraform import TfDirManager
+from juju import temp_named_model
 
 
 @pytest.fixture(scope="module")
