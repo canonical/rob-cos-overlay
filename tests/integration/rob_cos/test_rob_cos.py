@@ -6,7 +6,7 @@ from helpers import (
     alert_group_names,
     scrape_jobs,
     assert_with_data,
-    cos_registration_agent_available,
+    cos_registration_agent_is_available,
     register_device,
     delete_device,
     assert_devices,
@@ -52,9 +52,9 @@ def test_update_track(tf_manager, cos_model: jubilant.Juju):
     catalogue_apps_are_reachable(cos_model)
 
 
-def test_deploy_one_robot(cos_model: jubilant.Juju, _robot_1_vm: LXDInstance):
+def test_deploy_one_robot(cos_model: jubilant.Juju, robot_1_vm: LXDInstance):
 
-    cos_registration_agent_available(ros_domain_id=1)
+    cos_registration_agent_is_available(ros_domain_id=1)
     register_device(ros_domain_id=1)
     devices = assert_devices(expected_count=1)
     device_uid = devices[0].get("uid")
@@ -62,7 +62,7 @@ def test_deploy_one_robot(cos_model: jubilant.Juju, _robot_1_vm: LXDInstance):
 
 
 def test_robot_deployed_configuration(
-    cos_model: jubilant.Juju, _robot_1_vm: LXDInstance
+    cos_model: jubilant.Juju, robot_1_vm: LXDInstance
 ):
     devices = get_cos_registration_server_devices()
     assert isinstance(devices, list) and devices, "Expected at least one device"
@@ -165,7 +165,7 @@ def test_deploy_a_second_robot(
     cos_model: jubilant.Juju, robot_1_vm: LXDInstance, robot_2_vm: LXDInstance
 ):
 
-    cos_registration_agent_available(ros_domain_id=2)
+    cos_registration_agent_is_available(ros_domain_id=2)
     register_device(ros_domain_id=2)
     devices = assert_devices(expected_count=2)
 

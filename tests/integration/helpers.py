@@ -93,7 +93,7 @@ def assert_with_data(condition: bool, message: str, data: object) -> None:
 
 
 @retry_for_10m
-def cos_registration_agent_available(
+def cos_registration_agent_is_available(
     *,
     ros_domain_id: int = 0,
 ) -> None:
