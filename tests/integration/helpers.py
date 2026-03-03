@@ -6,10 +6,14 @@ from typing import List
 import requests
 from tenacity import retry, stop_after_delay, wait_fixed
 
-
 COS_SERVER_ADDRESS = "http://10.64.140.43/cos-rob"
 COS_REGISTRATION_SERVER_API = f"{COS_SERVER_ADDRESS}-cos-registration-server/api/v1/"
 COS_REGISTRATION_SERVER_API_DEVICES = f"{COS_REGISTRATION_SERVER_API}devices/"
+
+COS_REGISTRATION_AGENT_REGISTRATION_SERVICE_NAME = (
+    "cos-registration-agent.register-device"
+)
+COS_REGISTRATION_AGENT_DELETION_SERVICE_NAME = "cos-registration-agent.delete-device"
 
 
 class Retry(Exception):
@@ -86,3 +90,61 @@ def assert_with_data(condition: bool, message: str, data: object) -> None:
     except (TypeError, ValueError):
         rendered = repr(data)
     raise AssertionError(f"{message}\nData:\n{rendered}")
+
+
+@retry_for_10m
+def cos_registration_agent_available(
+    *,
+    ros_domain_id: int = 0,
+) -> None:
+    """Wait until the cos-registration-agent service is listed."""
+    from ros2 import ensure_snapd_service_list_contains
+
+    ensure_snapd_service_list_contains(
+        COS_REGISTRATION_AGENT_REGISTRATION_SERVICE_NAME,
+        ros_domain_id=ros_domain_id,
+    )
+
+
+@retry_for_10m
+def register_device(
+    *,
+    ros_domain_id: int = 0,
+) -> None:
+    """Wait until the cos-registration-agent registers the device."""
+    from ros2 import ensure_snapd_service_started
+
+    ensure_snapd_service_started(
+        COS_REGISTRATION_AGENT_REGISTRATION_SERVICE_NAME,
+        ros_domain_id=ros_domain_id,
+    )
+
+
+@retry_for_10m
+def delete_device(
+    *,
+    ros_domain_id: int = 0,
+) -> None:
+    """Wait until the cos-registration-agent deletes the device."""
+    from ros2 import ensure_snapd_service_started
+
+    ensure_snapd_service_started(
+        COS_REGISTRATION_AGENT_DELETION_SERVICE_NAME,
+        ros_domain_id=ros_domain_id,
+    )
+
+
+@retry_for_10m
+def assert_devices(*, expected_count: int) -> List:
+    """Wait until the expected number of devices are registered."""
+    devices = get_cos_registration_server_devices()
+    assert isinstance(devices, list), "Expected devices endpoint to return a list"
+    if expected_count == 0:
+        assert len(devices) == 0, "Expected no devices to be registered"
+        return devices
+    if len(devices) < expected_count:
+        raise Retry
+    assert len(devices) == expected_count, (
+        f"Expected exactly {expected_count} device(s) to be registered"
+    )
+    return devices

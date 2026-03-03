@@ -2,12 +2,14 @@ from pathlib import Path
 import json
 
 from helpers import (
-    retry_for_10m,
-    Retry,
     get_cos_registration_server_devices,
     alert_group_names,
     scrape_jobs,
     assert_with_data,
+    cos_registration_agent_available,
+    register_device,
+    delete_device,
+    assert_devices,
 )
 
 from juju import (
@@ -18,10 +20,6 @@ from juju import (
     find_application_data,
 )
 
-from ros2 import (
-    ensure_snapd_service_list_contains,
-    ensure_snapd_service_started,
-)
 from craft_providers.lxd.lxd_instance import LXDInstance
 
 import jubilant
@@ -54,46 +52,17 @@ def test_update_track(tf_manager, cos_model: jubilant.Juju):
     catalogue_apps_are_reachable(cos_model)
 
 
-def test_deploy_one_robot(cos_model: jubilant.Juju, robot_1_vm: LXDInstance):
-    service_name = "cos-registration-agent.register-device"
-
-    @retry_for_10m
-    # Retry until the service is available
-    def cos_registration_agent_available(ros_domain_id: int = 0):
-        ensure_snapd_service_list_contains(
-            service_name,
-            ros_domain_id=ros_domain_id,
-        )
-
-    @retry_for_10m
-    # Retry until the gadget snap is done with seed
-    def register_device(ros_domain_id: int = 0):
-        ensure_snapd_service_started(
-            service_name,
-            ros_domain_id=ros_domain_id,
-        )
-
-    @retry_for_10m
-    # Retry until the service has finished registering
-    def assert_device():
-        devices = get_cos_registration_server_devices()
-        assert isinstance(devices, list), "Expected devices endpoint to return a list"
-        if len(devices) == 0:
-            raise Retry
-        assert len(devices) == 1, "Expected exactly one device to be registered"
-        device_uid = devices[0].get("uid")
-        assert device_uid, "Expected device uid to be present"
-        return devices
+def test_deploy_one_robot(cos_model: jubilant.Juju, _robot_1_vm: LXDInstance):
 
     cos_registration_agent_available(ros_domain_id=1)
     register_device(ros_domain_id=1)
-    assert_device()
-
-    trigger_update_status(cos_model, "cos-registration-server/0")
+    devices = assert_devices(expected_count=1)
+    device_uid = devices[0].get("uid")
+    assert device_uid, "Expected device uid to be present"
 
 
 def test_robot_deployed_configuration(
-    cos_model: jubilant.Juju, robot_1_vm: LXDInstance
+    cos_model: jubilant.Juju, _robot_1_vm: LXDInstance
 ):
     devices = get_cos_registration_server_devices()
     assert isinstance(devices, list) and devices, "Expected at least one device"
@@ -101,6 +70,10 @@ def test_robot_deployed_configuration(
     device_address = devices[0].get("address")
     assert device_uid, "Expected device uid to be present"
     assert device_address, "Expected device address to be present"
+
+    # trigger the update status hook to make sure
+    # the configuration progagated
+    trigger_update_status(cos_model, "cos-registration-server/0")
 
     prometheus_app_data = find_application_data(
         cos_model,
@@ -186,3 +159,34 @@ def test_robot_deployed_configuration(
         "Grafana dashboards missing templates from cos-registration-server",
         grafana_app_data,
     )
+
+
+def test_deploy_a_second_robot(
+    cos_model: jubilant.Juju, robot_1_vm: LXDInstance, robot_2_vm: LXDInstance
+):
+
+    cos_registration_agent_available(ros_domain_id=2)
+    register_device(ros_domain_id=2)
+    devices = assert_devices(expected_count=2)
+
+    device_uid = devices[0].get("uid")
+    assert device_uid, "Expected device uid to be present"
+    device_uid = devices[1].get("uid")
+    assert device_uid, "Expected device uid to be present"
+
+
+def test_delete_robots(
+    cos_model: jubilant.Juju, robot_1_vm: LXDInstance, robot_2_vm: LXDInstance
+):
+
+    assert_devices(expected_count=2)
+
+    # delete the first robot
+    delete_device(ros_domain_id=1)
+
+    assert_devices(expected_count=1)
+
+    # delete the second robot
+    delete_device(ros_domain_id=2)
+
+    assert_devices(expected_count=0)
