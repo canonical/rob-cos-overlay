@@ -1,13 +1,9 @@
 from pathlib import Path
 import json
 
-import pytest
-import requests
-
 from helpers import (
     retry_for_10m,
     Retry,
-    ros_domain_cloud_init_config,
     get_cos_registration_server_devices,
     alert_group_names,
     scrape_jobs,
@@ -26,10 +22,7 @@ from ros2 import (
     ensure_snapd_service_list_contains,
     ensure_snapd_service_started,
 )
-
 from craft_providers.lxd.lxd_instance import LXDInstance
-
-from lxd_ubuntu_core import temp_lxd_vm, lxc, ubuntu_core_image
 
 import jubilant
 
@@ -61,17 +54,11 @@ def test_update_track(tf_manager, cos_model: jubilant.Juju):
     catalogue_apps_are_reachable(cos_model)
 
 
-def test_deploy_one_robot(
-    cos_model: jubilant.Juju, ubuntu_core_image: str, temp_lxd_vm: LXDInstance
-):
-    robot_1 = temp_lxd_vm(
-        name="tb3-robot-1",
-        image_alias=ubuntu_core_image,
-        cloud_init=ros_domain_cloud_init_config(1),
-    )
+def test_deploy_one_robot(cos_model: jubilant.Juju, robot_1_vm: LXDInstance):
     service_name = "cos-registration-agent.register-device"
 
     @retry_for_10m
+    # Retry until the service is available
     def cos_registration_agent_available(ros_domain_id: int = 0):
         ensure_snapd_service_list_contains(
             service_name,
@@ -79,6 +66,7 @@ def test_deploy_one_robot(
         )
 
     @retry_for_10m
+    # Retry until the gadget snap is done with seed
     def register_device(ros_domain_id: int = 0):
         ensure_snapd_service_started(
             service_name,
@@ -86,6 +74,7 @@ def test_deploy_one_robot(
         )
 
     @retry_for_10m
+    # Retry until the service has finished registering
     def assert_device():
         devices = get_cos_registration_server_devices()
         assert isinstance(devices, list), "Expected devices endpoint to return a list"
@@ -104,7 +93,7 @@ def test_deploy_one_robot(
 
 
 def test_robot_deployed_configuration(
-    cos_model: jubilant.Juju, ubuntu_core_image: str, temp_lxd_vm: LXDInstance
+    cos_model: jubilant.Juju, robot_1_vm: LXDInstance
 ):
     devices = get_cos_registration_server_devices()
     assert isinstance(devices, list) and devices, "Expected at least one device"
@@ -116,8 +105,9 @@ def test_robot_deployed_configuration(
     prometheus_app_data = find_application_data(
         cos_model,
         "prometheus/0",
-        "metrics-endpoint",
+        "receive-remote-write",
         "cos-registration-server/0",
+        "send-remote-write-alerts-devices",
         "alert_rules",
     )
     prometheus_group_names = alert_group_names(prometheus_app_data["alert_rules"])
@@ -127,7 +117,7 @@ def test_robot_deployed_configuration(
         prometheus_app_data,
     )
     assert_with_data(
-        "low_battery" in prometheus_group_names,
+        "low_battery_alerts" in prometheus_group_names,
         "Prometheus low_battery alert group missing",
         prometheus_app_data,
     )
@@ -137,6 +127,7 @@ def test_robot_deployed_configuration(
         "loki/0",
         "logging",
         "cos-registration-server/0",
+        "logging-alerts-devices",
         "alert_rules",
     )
     loki_group_names = alert_group_names(loki_app_data["alert_rules"])
@@ -154,8 +145,9 @@ def test_robot_deployed_configuration(
     blackbox_app_data = find_application_data(
         cos_model,
         "blackbox-exporter/0",
-        "blackbox",
+        "probes",
         "cos-registration-server/0",
+        "probes-devices",
         "scrape_probes",
     )
     static_configs = scrape_jobs(blackbox_app_data["scrape_probes"])
@@ -180,6 +172,7 @@ def test_robot_deployed_configuration(
         "grafana/0",
         "grafana-dashboard",
         "cos-registration-server/0",
+        "grafana-dashboard-devices",
         "dashboards",
     )
     try:

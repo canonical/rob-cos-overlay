@@ -1,4 +1,4 @@
-import os
+import contextlib
 import tarfile
 import tempfile
 from pathlib import Path
@@ -6,63 +6,45 @@ from urllib.error import HTTPError
 from urllib.request import urlopen
 import logging
 
-import pytest
-
-from craft_providers.lxd import LXC, lxd
+from craft_providers.lxd import LXC
 from craft_providers.lxd.lxd_instance import LXDInstance
 
 logger = logging.getLogger(__name__)
 
 
-@pytest.fixture(scope="session")
-def lxc():
-    """Return a craft-providers LXC wrapper instance."""
-    return LXC()
-
-
-@pytest.fixture(scope="session")
-def installed_lxd():
-    """Ensure lxd is installed, or skip the test if we cannot."""
-    if lxd.is_installed():
-        return
-
-    pytest.skip("lxd not installed, skipped")
-
-
-@pytest.fixture(scope="module")
-def temp_lxd_vm(lxc, request):
-    """Factory fixture that creates and cleans up LXD VMs per test."""
-    keep = os.environ.get("KEEP_LXD_VMS") is not None
-
-    def _factory(
-        *,
-        name: str,
-        image_alias: str,
-        cloud_init: str | None = None,
-        cpus: int = 2,
-        memory: int = 4,
-        disk: int = 10,
-    ) -> LXDInstance:
-        launch_ubuntu_core_vm(
-            lxc,
-            name=name,
-            image_alias=image_alias,
-            cloud_init=cloud_init,
-            cpus=cpus,
-            memory=memory,
-            disk=disk,
-        )
-        instance = LXDInstance(
-            name=name,
-            project="default",
-            remote="local",
-            lxc=lxc,
-        )
+@contextlib.contextmanager
+def temp_lxd_vm(
+    lxc: LXC,
+    *,
+    name: str,
+    image_alias: str,
+    cloud_init: str | None = None,
+    cpus: int = 2,
+    memory: int = 4,
+    disk: int = 10,
+    keep: bool = False,
+):
+    """Context manager that creates and cleans up LXD VMs."""
+    launch_ubuntu_core_vm(
+        lxc,
+        name=name,
+        image_alias=image_alias,
+        cloud_init=cloud_init,
+        cpus=cpus,
+        memory=memory,
+        disk=disk,
+    )
+    instance = LXDInstance(
+        name=name,
+        project="default",
+        remote="local",
+        lxc=lxc,
+    )
+    try:
+        yield instance
+    finally:
         if not keep:
-            request.addfinalizer(lambda: lxc.delete(instance_name=name, force=True))
-        return instance
-
-    return _factory
+            lxc.delete(instance_name=name, force=True)
 
 
 def create_core_profile(lxc: LXC):
@@ -157,17 +139,6 @@ def import_ubuntu_core_image(lxc: LXC, qcow2_url: str, alias: str):
         lxc._run_lxc(["image", "delete", alias], check=False)
 
         lxc._run_lxc(["image", "import", str(metadata), str(qcow2), "--alias", alias])
-
-
-@pytest.fixture(scope="session")
-def ubuntu_core_image(lxc):
-    image_alias = "tb3c-core22"
-    import_ubuntu_core_image(
-        lxc,
-        qcow2_url="https://github.com/ubuntu-robotics/turtlebot3c-ubuntu-core/releases/download/0.1.1-humble-virtual-cos/turtlebot3c.qcow2.tar.gz",
-        alias=image_alias,
-    )
-    return image_alias
 
 
 def launch_ubuntu_core_vm(

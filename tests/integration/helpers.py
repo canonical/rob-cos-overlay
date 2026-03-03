@@ -1,3 +1,5 @@
+"""Generic integration test helpers."""
+
 import json
 from typing import List
 
@@ -11,13 +13,14 @@ COS_REGISTRATION_SERVER_API_DEVICES = f"{COS_REGISTRATION_SERVER_API}devices/"
 
 
 class Retry(Exception):
-    """Exception raised when we should retry"""
+    """Exception raised when we should retry."""
 
 
 retry_for_10m = retry(stop=stop_after_delay(60 * 10), wait=wait_fixed(5))
 
 
 def get_cos_registration_server_devices() -> List:
+    """Return the list of devices from the registration server API."""
     response = requests.get(
         COS_REGISTRATION_SERVER_API_DEVICES,
         timeout=30,
@@ -27,6 +30,7 @@ def get_cos_registration_server_devices() -> List:
 
 
 def ros_domain_cloud_init_config(domain_id: int = 6) -> str:
+    """Return cloud-init config to set ROS_DOMAIN_ID."""
     return (
         "#cloud-config\n"
         "write_files:\n"
@@ -42,6 +46,7 @@ def ros_domain_cloud_init_config(domain_id: int = 6) -> str:
 
 
 def alert_group_names(alert_rules: str) -> set[str]:
+    """Return alert group names from alert_rules JSON."""
     try:
         parsed = json.loads(alert_rules)
     except json.JSONDecodeError as exc:
@@ -51,6 +56,7 @@ def alert_group_names(alert_rules: str) -> set[str]:
 
 
 def scrape_jobs(scrape_probes: str) -> list[dict]:
+    """Return static_configs entries from scrape_probes JSON."""
     try:
         parsed = json.loads(scrape_probes)
     except json.JSONDecodeError as exc:
@@ -72,6 +78,7 @@ def scrape_jobs(scrape_probes: str) -> list[dict]:
 
 
 def assert_with_data(condition: bool, message: str, data: object) -> None:
+    """Assert condition and include formatted data on failure."""
     if condition:
         return
     try:

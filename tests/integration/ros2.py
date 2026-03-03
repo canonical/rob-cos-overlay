@@ -1,3 +1,5 @@
+"""ROS 2 helpers for integration tests."""
+
 import os
 import subprocess
 

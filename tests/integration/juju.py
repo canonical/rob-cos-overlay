@@ -1,3 +1,5 @@
+"""Juju/Jubilant integration helpers."""
+
 import contextlib
 import json
 import logging
@@ -22,6 +24,7 @@ def temp_named_model(
     config: Mapping[str, jubilant._juju.ConfigValue] | None = None,
     credential: str | None = None,
 ) -> Generator[jubilant.Juju, None, None]:
+    """Create and yield a temporary Juju model."""
     juju = jubilant.Juju()
     juju.add_model(
         name, cloud=cloud, controller=controller, config=config, credential=credential
@@ -69,6 +72,7 @@ def refresh_o11y_apps(juju: jubilant.Juju, channel: str, base: Optional[str] = N
 def wait_for_active_idle_without_error(
     jujus: List[jubilant.Juju], timeout: int = 60 * 45
 ):
+    """Wait for models to settle without errors."""
     for juju in jujus:
         print(f"\nwaiting for the model ({juju.model}) to settle ...\n")
         juju.wait(jubilant.all_active, delay=10, timeout=timeout)
@@ -84,6 +88,7 @@ def wait_for_active_idle_without_error(
 def get_tls_context(
     temp_path: Path, juju: jubilant.Juju, ca_name: str
 ) -> Optional[ssl.SSLContext]:
+    """Return an SSL context from the external CA, if available."""
     if ca_name not in juju.status().apps:
         return None
 
@@ -100,6 +105,7 @@ def get_tls_context(
 
 
 def blackbox_catalogue_ingress_fix(juju: jubilant.Juju):
+    """Recreate blackbox exporter relation for catalogue ingress."""
     # FIXME: https://github.com/canonical/blackbox-exporter-k8s-operator/issues/74
     juju.remove_relation("blackbox-exporter:catalogue", "catalogue:catalogue")
     wait_for_active_idle_without_error([juju])
@@ -110,6 +116,7 @@ def blackbox_catalogue_ingress_fix(juju: jubilant.Juju):
 def catalogue_apps_are_reachable(
     juju: jubilant.Juju, tls_context: Optional[ssl.SSLContext] = None
 ):
+    """Assert catalogue apps are reachable from the catalogue unit."""
     stdout = juju.ssh("catalogue/0", "cat /web/config.json", container="catalogue")
     cat_conf = json.loads(stdout)
     apps = {app["name"]: app["url"] for app in cat_conf["apps"]}
@@ -121,6 +128,7 @@ def catalogue_apps_are_reachable(
 
 
 def trigger_update_status(juju: jubilant.Juju, unit: str) -> None:
+    """Trigger an update-status hook using juju ssh and juju-exec."""
     model = juju.model
     if not model:
         raise AssertionError("Juju model not set")
@@ -137,6 +145,7 @@ def trigger_update_status(juju: jubilant.Juju, unit: str) -> None:
 
 
 def show_unit(juju: jubilant.Juju, unit: str) -> dict:
+    """Return show-unit data for a unit."""
     output = juju._cli("show-unit", unit, "--format", "json")
     if isinstance(output, (tuple, list)):
         output = output[0]
@@ -149,12 +158,16 @@ def show_unit(juju: jubilant.Juju, unit: str) -> dict:
 def relation_application_data(
     juju: jubilant.Juju,
     unit: str,
-    related_endpoint: str,
+    endpoint: str,
     related_unit: str,
+    related_endpoint: str,
 ) -> list[dict]:
+    """Return relation application-data entries for a unit relation."""
     unit_data = show_unit(juju, unit)
     data_items: list[dict] = []
     for rel in unit_data.get("relation-info", []):
+        if rel.get("endpoint") != endpoint:
+            continue
         if rel.get("related-endpoint") != related_endpoint:
             continue
         related_units = rel.get("related-units", {})
@@ -174,12 +187,14 @@ def relation_application_data(
 def find_application_data(
     juju: jubilant.Juju,
     unit: str,
-    related_endpoint: str,
+    endpoint: str,
     related_unit: str,
+    related_endpoint: str,
     key: str,
 ) -> dict:
+    """Return the first application-data dict that includes key."""
     for app_data in relation_application_data(
-        juju, unit, related_endpoint, related_unit
+        juju, unit, endpoint, related_unit, related_endpoint
     ):
         if key in app_data:
             return app_data
