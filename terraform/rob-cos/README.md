@@ -41,6 +41,7 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 | cos\_lite | git::https://github.com/canonical/observability-stack//terraform/cos-lite | track/2 |
 | cos\_registration\_server | git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform | n/a |
 | foxglove\_studio | git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform | n/a |
+| postgresql | git::https://github.com/canonical/postgresql-k8s-operator//terraform | 986f614b9e437cb69f8ad0d51a1d03d0225033a3 |
 
 ## Resources
 
@@ -49,12 +50,16 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 | [juju_integration.catalogue_blackbox_exporter](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.catalogue_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.catalogue_foxglove_studio](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.database_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.grafana_dashboard_blackbox_exporter](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.grafana_dashboard_database](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.grafana_dashboard_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.ingress_blackbox_exporter](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.ingress_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.ingress_foxglove_studio](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.logging_alert_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.logging_postgresql](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
+| [juju_integration.metrics_database](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.probes_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.self_metrics_endpoint_blackbox_exporter](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
 | [juju_integration.send_remote_write_alerts_devices_cos_registration_server](https://registry.terraform.io/providers/juju/juju/latest/docs/resources/integration) | resource |
@@ -70,6 +75,7 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 | cos\_registration\_server | Application configuration for COS Registration Server. For more details: https://github.com/ubuntu-robotics/cos-registration-server-k8s-operator/tree/main/terraform | ```object({ app_name = optional(string, "cos-registration-server") channel = optional(string, "latest/edge") config = optional(map(string), {}) constraints = optional(string, "arch = amd64") revision = optional(number, null) storage_directives = optional(map(string), {}) units = optional(number, 1) })``` | `{}` | no |
 | foxglove\_studio | Application configuration for Foxglove Studio. For more details: https://github.com/ubuntu-robotics/foxglove-k8s-operator/tree/main/terraform | ```object({ app_name = optional(string, "foxglove-studio") channel = optional(string, "latest/edge") config = optional(map(string), {}) constraints = optional(string, "arch = amd64") revision = optional(number, null) storage_directives = optional(map(string), {}) units = optional(number, 1) })``` | `{}` | no |
 | model\_owner | The owner of the model to deploy to | `string` | `"admin"` | no |
+| postgresql | Application configuration for postgresql-k8s-operator For more details: https://github.com/canonical/postgresql-k8s-operator/tree/main/terraform | ```object({ app_name = optional(string, "postgresql") base = optional(string, "ubuntu@22.04") channel = optional(string, "14/stable") config = optional(map(string), {}) constraints = optional(string, "arch = amd64") resources = optional(map(string), {}) revision = optional(number, null) storage_directives = optional(map(string), { pgdata = "10G" }) units = optional(number, 1) })``` | `{}` | no |
 
 ## Outputs
 

@@ -4,6 +4,7 @@ output "app_names" {
       blackbox_exporter       = module.blackbox_exporter.app_name,
       cos_registration_server = module.cos_registration_server.app_name,
       foxglove_studio         = module.foxglove_studio.app_name,
+      postgresql              = module.postgresql.app_name,
     },
   )
   description = "The names of the deployed applications"
@@ -16,6 +17,7 @@ output "components" {
         blackbox_exporter       = module.blackbox_exporter,
         cos_registration_server = module.cos_registration_server,
         foxglove_studio         = module.foxglove_studio,
+        postgresql              = module.postgresql,
       }
     ),
     module.cos_lite.components,
