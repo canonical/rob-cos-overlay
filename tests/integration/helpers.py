@@ -1,10 +1,13 @@
 """Generic integration test helpers."""
 
 import json
+import logging
 from typing import List
 
 import requests
-from tenacity import retry, stop_after_delay, wait_fixed
+from tenacity import retry, stop_after_delay, wait_fixed, before_sleep_log
+
+from ros2 import list_snapd_services, start_snapd_service
 
 COS_SERVER_ADDRESS = "http://10.64.140.43/cos-rob"
 COS_REGISTRATION_SERVER_API = f"{COS_SERVER_ADDRESS}-cos-registration-server/api/v1/"
@@ -16,11 +19,18 @@ COS_REGISTRATION_AGENT_REGISTRATION_SERVICE_NAME = (
 COS_REGISTRATION_AGENT_DELETION_SERVICE_NAME = "cos-registration-agent.delete-device"
 
 
+logger = logging.getLogger(__name__)
+
+
 class Retry(Exception):
     """Exception raised when we should retry."""
 
 
-retry_for_10m = retry(stop=stop_after_delay(60 * 10), wait=wait_fixed(5))
+retry_for_10m = retry(
+    stop=stop_after_delay(60 * 10),
+    wait=wait_fixed(5),
+    before_sleep=before_sleep_log(logger, logging.INFO),
+)
 
 
 def get_cos_registration_server_devices() -> List:
@@ -34,7 +44,7 @@ def get_cos_registration_server_devices() -> List:
 
 
 def ros_domain_cloud_init_config(domain_id: int = 6) -> str:
-    """Return cloud-init config to set ROS_DOMAIN_ID."""
+    """Return cloud-init config to set ROS_DOMAIN_ID and refresh snaps."""
     return (
         "#cloud-config\n"
         "write_files:\n"
@@ -46,6 +56,14 @@ def ros_domain_cloud_init_config(domain_id: int = 6) -> str:
         "    content: |\n"
         f"      ROS_DOMAIN_ID={domain_id}\n"
         "    append: true\n"
+        "runcmd:\n"
+        "  - snap wait system seed.loaded\n"
+        "  - |\n"
+        "    while snap changes | grep -q 'Doing'; do\n"
+        '      echo "Waiting for all initial seeded snaps to finish installing..."\n'
+        "      sleep 5\n"
+        "    done\n"
+        "  - snap refresh\n"
     )
 
 
@@ -98,8 +116,6 @@ def cos_registration_agent_is_available(
     ros_domain_id: int = 0,
 ) -> None:
     """Wait until the cos-registration-agent service is listed."""
-    from ros2 import ensure_snapd_service_list_contains
-
     ensure_snapd_service_list_contains(
         COS_REGISTRATION_AGENT_REGISTRATION_SERVICE_NAME,
         ros_domain_id=ros_domain_id,
@@ -112,8 +128,6 @@ def register_device(
     ros_domain_id: int = 0,
 ) -> None:
     """Wait until the cos-registration-agent registers the device."""
-    from ros2 import ensure_snapd_service_started
-
     ensure_snapd_service_started(
         COS_REGISTRATION_AGENT_REGISTRATION_SERVICE_NAME,
         ros_domain_id=ros_domain_id,
@@ -126,12 +140,35 @@ def delete_device(
     ros_domain_id: int = 0,
 ) -> None:
     """Wait until the cos-registration-agent deletes the device."""
-    from ros2 import ensure_snapd_service_started
-
     ensure_snapd_service_started(
         COS_REGISTRATION_AGENT_DELETION_SERVICE_NAME,
         ros_domain_id=ros_domain_id,
     )
+
+
+def ensure_snapd_service_list_contains(
+    service_name: str,
+    *,
+    ros_domain_id: int | None = None,
+) -> None:
+    """Raise Retry if the snapd service list lacks the target service."""
+    result = list_snapd_services(ros_domain_id=ros_domain_id)
+    if service_name not in result.stdout:
+        raise Retry
+
+
+def ensure_snapd_service_started(
+    service_name: str,
+    *,
+    ros_domain_id: int | None = None,
+) -> None:
+    """Raise Retry unless ros2_snapd start reports success."""
+    result = start_snapd_service(
+        service_name,
+        ros_domain_id=ros_domain_id,
+    )
+    if "success=True" not in result.stdout:
+        raise Retry
 
 
 @retry_for_10m

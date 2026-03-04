@@ -3,8 +3,6 @@
 import os
 import subprocess
 
-from helpers import Retry
-
 
 def make_env(ros_domain_id: int | None = None) -> dict[str, str]:
     """Return a process environment with an optional ROS_DOMAIN_ID override."""
@@ -27,6 +25,7 @@ def run_ros2(
         check=check,
         capture_output=True,
         text=True,
+        timeout=60,
     )
 
 
@@ -86,28 +85,3 @@ def stop_snapd_service(
         ros_domain_id=ros_domain_id,
         check=True,
     )
-
-
-def ensure_snapd_service_list_contains(
-    service_name: str,
-    *,
-    ros_domain_id: int | None = None,
-) -> None:
-    """Raise Retry if the snapd service list lacks the target service."""
-    result = list_snapd_services(ros_domain_id=ros_domain_id)
-    if service_name not in result.stdout:
-        raise Retry
-
-
-def ensure_snapd_service_started(
-    service_name: str,
-    *,
-    ros_domain_id: int | None = None,
-) -> None:
-    """Raise Retry unless ros2_snapd start reports success."""
-    result = start_snapd_service(
-        service_name,
-        ros_domain_id=ros_domain_id,
-    )
-    if "success=True" not in result.stdout:
-        raise Retry
