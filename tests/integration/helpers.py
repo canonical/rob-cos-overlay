@@ -43,7 +43,7 @@ def get_cos_registration_server_devices() -> List:
     return response.json()
 
 
-def ros_domain_cloud_init_config(domain_id: int = 6) -> str:
+def ros_domain_cloud_init_config(ros_domain_id: int = 0) -> str:
     """Return cloud-init config to set ROS_DOMAIN_ID and refresh snaps."""
     return (
         "#cloud-config\n"
@@ -51,10 +51,10 @@ def ros_domain_cloud_init_config(domain_id: int = 6) -> str:
         "  - path: /etc/systemd/system.conf.d/10-ros-domain.conf\n"
         "    content: |\n"
         "      [Manager]\n"
-        f'      DefaultEnvironment="ROS_DOMAIN_ID={domain_id}"\n'
+        f'      DefaultEnvironment="ROS_DOMAIN_ID={ros_domain_id}"\n'
         "  - path: /etc/environment\n"
         "    content: |\n"
-        f"      ROS_DOMAIN_ID={domain_id}\n"
+        f"      ROS_DOMAIN_ID={ros_domain_id}\n"
         "    append: true\n"
         "runcmd:\n"
         "  - snap wait system seed.loaded\n"
