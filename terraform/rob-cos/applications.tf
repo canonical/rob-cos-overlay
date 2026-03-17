@@ -19,7 +19,7 @@ module "blackbox_exporter" {
 }
 
 module "cos_lite" {
-  source       = "git::https://github.com/canonical/observability-stack//terraform/cos-lite?ref=track/2"
+  source       = "git::https://github.com/canonical/observability-stack//terraform/cos-lite?ref=22bdedde6e106774d2c6325aa912572db5c76ae0"
   channel      = var.cos_lite.channel
   model_uuid   = data.juju_model.model.uuid
   internal_tls = var.cos_lite.internal_tls
@@ -38,16 +38,17 @@ module "cos_registration_server" {
 }
 
 module "postgresql" {
-  source             = "git::https://github.com/canonical/postgresql-k8s-operator//terraform?ref=986f614b9e437cb69f8ad0d51a1d03d0225033a3"
-  model_uuid         = data.juju_model.model.uuid
+  app_name           = var.postgresql.app_name
+  base               = var.postgresql.base
   channel            = var.postgresql.channel
   config             = var.postgresql.config
   constraints        = var.postgresql.constraints
+  model_uuid         = data.juju_model.model.uuid
+  resources          = var.postgresql.resources
   revision           = var.postgresql.revision
+  source             = "git::https://github.com/canonical/postgresql-k8s-operator//terraform?ref=986f614b9e437cb69f8ad0d51a1d03d0225033a3"
   storage_directives = var.postgresql.storage_directives
   units              = var.postgresql.units
-  base               = var.postgresql.base
-  resources          = var.postgresql.resources
 }
 
 module "foxglove_studio" {

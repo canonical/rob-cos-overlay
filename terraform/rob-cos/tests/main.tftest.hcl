@@ -75,7 +75,7 @@ run "basic_deploy" {
 
   assert {
     condition     = module.rob_cos.components.postgresql.app_name != ""
-    error_message = "cos-lite postgresql app_name should be set"
+    error_message = "postgresql app_name should be set"
   }
 
   # We do not deploy ssc by default
