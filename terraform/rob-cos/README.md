@@ -38,7 +38,7 @@ terraform apply -var="model=<K8S_MODEL_NAME>"
 | Name | Source | Version |
 |------|--------|---------|
 | blackbox\_exporter | git::https://github.com/ubuntu-robotics/blackbox-exporter-k8s-operator//terraform | feat/terraform |
-| cos\_lite | git::https://github.com/canonical/observability-stack//terraform/cos-lite | track/2 |
+| cos\_lite | git::https://github.com/canonical/observability-stack//terraform/cos-lite | 22bdedde6e106774d2c6325aa912572db5c76ae0 |
 | cos\_registration\_server | git::https://github.com/canonical/cos-registration-server-k8s-operator//terraform | n/a |
 | foxglove\_studio | git::https://github.com/ubuntu-robotics/foxglove-k8s-operator//terraform | n/a |
 | postgresql | git::https://github.com/canonical/postgresql-k8s-operator//terraform | 986f614b9e437cb69f8ad0d51a1d03d0225033a3 |
