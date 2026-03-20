@@ -61,11 +61,7 @@ def ros_domain_cloud_init_config(ros_domain_id: int = 0) -> str:
         "    append: true\n"
         "runcmd:\n"
         "  - snap wait system seed.loaded\n"
-        "  - |\n"
-        "    while snap changes | grep -q 'Doing'; do\n"
-        '      echo "Waiting for all initial seeded snaps to finish installing..."\n'
-        "      sleep 5\n"
-        "    done\n"
+        "  - snap watch --last=install?\n"
         "  - snap refresh\n"
     )
 
