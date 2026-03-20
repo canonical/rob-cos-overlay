@@ -9,8 +9,11 @@ from tenacity import retry, stop_after_delay, wait_fixed, before_sleep_log
 
 from ros2 import list_snapd_services, start_snapd_service
 
-COS_SERVER_ADDRESS = "http://10.64.140.43/cos-rob"
-COS_REGISTRATION_SERVER_API = f"{COS_SERVER_ADDRESS}-cos-registration-server/api/v1/"
+COS_SERVER_ADDRESS = "http://10.64.140.43"
+COS_MODEL_NAME = "cos-rob"
+COS_REGISTRATION_SERVER_API = (
+    f"{COS_SERVER_ADDRESS}/{COS_MODEL_NAME}-cos-registration-server/api/v1/"
+)
 COS_REGISTRATION_SERVER_API_DEVICES = f"{COS_REGISTRATION_SERVER_API}devices/"
 
 COS_REGISTRATION_AGENT_REGISTRATION_SERVICE_NAME = (
