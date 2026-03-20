@@ -15,6 +15,9 @@ from collections.abc import Mapping
 logger = logging.getLogger(__name__)
 
 
+# We must used a named model since
+# the Ubuntu Core images built for
+# the robots have hardcoded values
 @contextlib.contextmanager
 def temp_named_model(
     name: str,
