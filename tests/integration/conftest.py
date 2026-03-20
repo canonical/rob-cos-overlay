@@ -13,6 +13,7 @@ from juju import temp_named_model
 from craft_providers.lxd import LXC
 from craft_providers.lxd import is_installed as is_lxd_installed
 from lxd_ubuntu_core import temp_lxd_vm, import_ubuntu_core_image
+import jubilant
 
 
 @pytest.fixture(scope="module")
@@ -49,7 +50,7 @@ def ubuntu_core_image(lxc):
     image_alias = "tb3c-core22"
     import_ubuntu_core_image(
         lxc,
-        qcow2_url="https://github.com/ubuntu-robotics/turtlebot3c-ubuntu-core/releases/download/0.1.1-humble-virtual-cos/turtlebot3c.qcow2.tar.gz",
+        qcow2_url="https://github.com/ubuntu-robotics/turtlebot3c-ubuntu-core/releases/download/0.1.2-humble-virtual-cos/turtlebot3c.qcow2.tar.gz",
         alias=image_alias,
     )
     return image_alias
