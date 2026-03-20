@@ -16,17 +16,17 @@ from lxd_ubuntu_core import temp_lxd_vm, import_ubuntu_core_image
 
 
 @pytest.fixture(scope="module")
-def ca_model():
-    keep_models: bool = os.environ.get("KEEP_MODELS") is not None
-    with temp_named_model(name="ca", keep=keep_models) as juju:
-        yield juju
+def cos_model(request: pytest.FixtureRequest):
+    def show_debug_log(juju: jubilant.Juju):
+        if request.session.testsfailed:
+            log = juju.debug_log(limit=1000)
+            print(log, end="")
 
-
-@pytest.fixture(scope="module")
-def cos_model():
     keep_models: bool = os.environ.get("KEEP_MODELS") is not None
     with temp_named_model(name="cos-rob", keep=keep_models, cloud="microk8s") as juju:
         yield juju
+        show_debug_log(juju)
+        return
 
 
 @pytest.fixture(scope="module")
