@@ -47,7 +47,7 @@ def temp_named_model(
                     "--destroy-storage",
                     "--force",
                 ]
-                juju._cli(*args, include_model=False, timeout=10 * 60)
+                juju.cli(*args, include_model=False, timeout=10 * 60)
                 juju.model = None
             except subprocess.TimeoutExpired as exc:
                 logger.error(
@@ -144,12 +144,12 @@ def trigger_update_status(juju: jubilant.Juju, unit: str) -> None:
         f"JUJU_UNIT_NAME={unit} "
         f"{dispatch_path}"
     )
-    juju._cli("ssh", "-m", model, unit, cmd)
+    juju.cli("ssh", "-m", model, unit, cmd)
 
 
 def show_unit(juju: jubilant.Juju, unit: str) -> dict:
     """Return show-unit data for a unit."""
-    output = juju._cli("show-unit", unit, "--format", "json")
+    output = juju.cli("show-unit", unit, "--format", "json")
     if isinstance(output, (tuple, list)):
         output = output[0]
     data = json.loads(output)
