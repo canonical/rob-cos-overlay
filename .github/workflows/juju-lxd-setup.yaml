@@ -20,7 +20,6 @@ jobs:
         sudo snap install terraform --classic
         sudo snap install concierge --classic
         sudo snap install lxd
-        sudo snap install ros2-snapd --channel humble/stable
         sudo concierge prepare --preset microk8s
 
     - name: Prepare juju tf provider environment
