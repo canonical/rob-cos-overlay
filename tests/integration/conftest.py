@@ -50,7 +50,7 @@ def ubuntu_core_image(lxc):
     image_alias = "tb3c-core22"
     import_ubuntu_core_image(
         lxc,
-        qcow2_url="https://github.com/ubuntu-robotics/turtlebot3c-ubuntu-core/releases/download/0.1.2-humble-virtual-cos/turtlebot3c.qcow2.tar.gz",
+        qcow2_url="https://github.com/ubuntu-robotics/turtlebot3c-ubuntu-core/releases/download/0.1.3-humble-virtual-cos/turtlebot3c.qcow2.tar.gz",
         alias=image_alias,
     )
     return image_alias
