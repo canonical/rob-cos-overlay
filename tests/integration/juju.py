@@ -47,7 +47,8 @@ def temp_named_model(
                     "--destroy-storage",
                     "--force",
                 ]
-                juju.cli(*args, include_model=False, timeout=10 * 60)
+                # cannot use juju.cli since it doesn't expose timeout
+                juju._cli(*args, include_model=False, timeout=10 * 60)
                 juju.model = None
             except subprocess.TimeoutExpired as exc:
                 logger.error(
