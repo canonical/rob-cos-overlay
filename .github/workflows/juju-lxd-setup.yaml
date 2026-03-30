@@ -12,6 +12,12 @@ jobs:
     runs-on: self-hosted-linux-amd64-noble-2xlarge
     steps:
     - uses: actions/checkout@v6
+    - name: Cache snaps
+      id: cache-snaps
+      uses: actions/cache@v5
+      with:
+        path: /var/lib/snapd/snaps
+        key: ${{ runner.os }}-var-lib-snapd-snaps
 
     - name: Install dependencies
       run: |
