@@ -79,14 +79,65 @@ def wait_for_active_idle_without_error(
     """Wait for models to settle without errors."""
     for juju in jujus:
         print(f"\nwaiting for the model ({juju.model}) to settle ...\n")
-        juju.wait(jubilant.all_active, delay=10, timeout=timeout)
-        print("\nwaiting for agents idle ...\n")
-        juju.wait(
-            jubilant.all_agents_idle,
-            delay=10,
-            timeout=timeout,
-            error=jubilant.any_error,
-        )
+        try:
+            juju.wait(jubilant.all_active, delay=10, timeout=timeout)
+            print("\nwaiting for agents idle ...\n")
+            juju.wait(
+                jubilant.all_agents_idle,
+                delay=10,
+                timeout=timeout,
+                error=jubilant.any_error,
+            )
+        except Exception:
+            dump_model_diagnostics(juju)
+            raise
+
+
+def _print_cli_output(juju: jubilant.Juju, *args: str) -> None:
+    """Print juju cli output if available, without failing diagnostics."""
+    try:
+        output = juju.cli(*args)
+        if isinstance(output, (tuple, list)):
+            output = output[0]
+        if output:
+            text = str(output)
+            print(text, end="" if text.endswith("\n") else "\n")
+    except Exception as exc:
+        print(f"failed to run `juju {' '.join(args)}`: {exc}")
+
+
+def dump_model_diagnostics(juju: jubilant.Juju) -> None:
+    """Print model diagnostics to make CI failures actionable."""
+    model = juju.model
+    if not model:
+        return
+
+    print(f"\n==== Diagnostics for model {model} ====\n")
+    print("---- juju status --relations ----")
+    _print_cli_output(juju, "status", "--relations")
+
+    # Focus status logs on units that are not yet active.
+    units_to_inspect: set[str] = set()
+    try:
+        status = juju.status()
+        for app_status in status.apps.values():
+            for unit_name, unit_status in app_status.units.items():
+                workload = getattr(unit_status.workload_status, "current", None)
+                agent = getattr(unit_status.juju_status, "current", None)
+                if workload != "active" or agent in {"error", "failed"}:
+                    units_to_inspect.add(unit_name)
+    except Exception as exc:
+        print(f"failed to inspect status for unit diagnostics: {exc}")
+
+    for unit_name in sorted(units_to_inspect):
+        print(f"---- juju show-status-log {unit_name} ----")
+        _print_cli_output(juju, "show-status-log", unit_name)
+
+    print("---- juju debug-log (limit 10000) ----")
+    try:
+        print(juju.debug_log(limit=10000), end="")
+    except Exception as exc:
+        print(f"failed to fetch debug log: {exc}")
 
 
 def get_tls_context(

@@ -20,7 +20,7 @@ import jubilant
 def cos_model(request: pytest.FixtureRequest):
     def show_debug_log(juju: jubilant.Juju):
         if request.session.testsfailed:
-            log = juju.debug_log(limit=1000)
+            log = juju.debug_log(limit=10000)
             print(log, end="")
 
     keep_models: bool = os.environ.get("KEEP_MODELS") is not None
