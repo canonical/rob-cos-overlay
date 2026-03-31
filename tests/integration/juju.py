@@ -133,9 +133,9 @@ def dump_model_diagnostics(juju: jubilant.Juju) -> None:
         print(f"---- juju show-status-log {unit_name} ----")
         _print_cli_output(juju, "show-status-log", unit_name)
 
-    print("---- juju debug-log (limit 10000) ----")
+    print("---- juju debug-log ----")
     try:
-        print(juju.debug_log(limit=10000), end="")
+        print(juju.debug_log(), end="")
     except Exception as exc:
         print(f"failed to fetch debug log: {exc}")
 
