@@ -23,5 +23,5 @@ jobs:
     uses: ./.github/workflows/juju-lxd-setup.yaml
     with:
       command: |
-          sudo snap install ros2-snapd --channel humble/stable
+          sudo snap install ros2-cli --channel humble/stable
           tox -e integration
