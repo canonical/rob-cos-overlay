@@ -85,12 +85,12 @@ def test_robot_deployed_configuration(
     )
     prometheus_group_names = alert_group_names(prometheus_app_data["alert_rules"])
     assert_with_data(
-        f"low_memory_{device_uid}_alerts" in prometheus_group_names,
+        f"low_memory_{device_uid}_rules" in prometheus_group_names,
         "Prometheus alert group missing for device",
         prometheus_app_data,
     )
     assert_with_data(
-        "low_battery_alerts" in prometheus_group_names,
+        "low_battery_rules" in prometheus_group_names,
         "Prometheus low_battery alert group missing",
         prometheus_app_data,
     )
