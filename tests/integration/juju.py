@@ -59,20 +59,6 @@ def temp_named_model(
                 )
 
 
-def refresh_o11y_apps(juju: jubilant.Juju, channel: str, base: Optional[str] = None):
-    """Temporary workaround for the issue:
-
-    FIXME: https://github.com/juju/terraform-provider-juju/issues/967
-    TODO: The issue has been close, so let's see if we can get rid of that.
-    """
-    for app in juju.status().apps:
-        if app in {"traefik", "ca"}:
-            continue
-        if "s3-integrator" in app:
-            continue
-        juju.refresh(app, channel=channel, base=base)
-
-
 def wait_for_active_idle_without_error(
     jujus: List[jubilant.Juju], timeout: int = 60 * 45
 ):
