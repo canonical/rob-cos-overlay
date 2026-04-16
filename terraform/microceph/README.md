@@ -46,7 +46,7 @@ terraform apply -var="model=<MODEL_NAME>"
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| model | Reference to an existing model resource or data source for the model to deploy to | `string` | n/a | yes |
+| model | Name of the model to deploy to (must be an LXD model) | `string` | n/a | yes |
 | app\_name | Name to give the deployed application | `string` | `"microceph"` | no |
 | channel | Channel that the charm is deployed from | `string` | `"squid/stable"` | no |
 | config | Map of the charm configuration options | `map(string)` | `{}` | no |
