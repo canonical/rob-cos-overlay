@@ -25,7 +25,7 @@ variable "constraints" {
 }
 
 variable "model" {
-  description = "Reference to an existing model resource or data source for the model to deploy to"
+  description = "Name of the model to deploy to (must be an LXD model)"
   type        = string
   nullable    = false
 }
