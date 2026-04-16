@@ -24,9 +24,16 @@ variable "constraints" {
   default     = "arch=amd64"
 }
 
-variable "model_uuid" {
+variable "model" {
   description = "Reference to an existing model resource or data source for the model to deploy to"
   type        = string
+  nullable    = false
+}
+
+variable "model_owner" {
+  description = "The owner of the model to deploy to"
+  type        = string
+  default     = "admin"
   nullable    = false
 }
 
