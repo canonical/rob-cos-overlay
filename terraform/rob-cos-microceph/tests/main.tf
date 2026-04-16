@@ -20,7 +20,7 @@ terraform {
 provider "juju" {}
 
 module "rob_cos_microceph" {
-  source               = "./.."
+  source          = "./.."
   robcos_model    = data.juju_model.robcos_model.name
   microceph_model = data.juju_model.microceph_model.name
 }
