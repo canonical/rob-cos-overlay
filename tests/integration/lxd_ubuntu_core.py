@@ -96,7 +96,7 @@ def import_ubuntu_core_image(lxc: LXC, qcow2_url: str, alias: str):
         except HTTPError as exc:
             if exc.code != 404:
                 raise
-            logger.debug("Couldn't retreive the entire tarball, trying for parts")
+            logger.debug("Couldn't retrieve the entire tarball, trying for parts")
             part_index = 1
             downloaded_parts: list[Path] = []
             while True:

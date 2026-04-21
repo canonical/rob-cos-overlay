@@ -15,7 +15,7 @@ from collections.abc import Mapping
 logger = logging.getLogger(__name__)
 
 
-# We must used a named model since
+# We must use a named model since
 # the Ubuntu Core images built for
 # the robots have hardcoded values
 @contextlib.contextmanager
@@ -138,6 +138,10 @@ def get_tls_context(
 
     task = juju.run(f"{ca_name}/0", "get-ca-certificate", {"format": "json"})
     cert = task.results.get("ca-certificate")
+    if not isinstance(cert, str) or not cert.strip():
+        raise ValueError(
+            f"Missing or empty 'ca-certificate' in get-ca-certificate results for {ca_name}"
+        )
     cert_path.write_text(cert)
 
     ctx = ssl.create_default_context()

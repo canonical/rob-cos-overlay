@@ -72,7 +72,7 @@ def test_robot_deployed_configuration(
     assert device_address, "Expected device address to be present"
 
     # trigger the update status hook to make sure
-    # the configuration progagated
+    # the configuration propagated
     trigger_update_status(cos_model, "cos-registration-server/0")
 
     prometheus_app_data = find_application_data(
