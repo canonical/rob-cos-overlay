@@ -6,7 +6,7 @@ from helpers import (
     alert_group_names,
     scrape_jobs,
     assert_with_data,
-    cos_registration_agent_is_available,
+    assert_cos_registration_agent_is_available,
     register_device,
     delete_device,
     assert_devices,
@@ -14,7 +14,7 @@ from helpers import (
 
 from juju import (
     blackbox_catalogue_ingress_fix,
-    catalogue_apps_are_reachable,
+    assert_catalogue_apps_are_reachable,
     wait_for_active_idle_without_error,
     trigger_update_status,
     find_application_data,
@@ -32,7 +32,7 @@ def test_deploy_reach_catalogue(tf_manager, cos_model: jubilant.Juju):
     tf_manager.apply(model=cos_model.model)
     wait_for_active_idle_without_error([cos_model])
     blackbox_catalogue_ingress_fix(cos_model)
-    catalogue_apps_are_reachable(cos_model)
+    assert_catalogue_apps_are_reachable(cos_model)
 
 
 def test_update_track(tf_manager, cos_model: jubilant.Juju):
@@ -49,12 +49,12 @@ def test_update_track(tf_manager, cos_model: jubilant.Juju):
     )
 
     wait_for_active_idle_without_error([cos_model])
-    catalogue_apps_are_reachable(cos_model)
+    assert_catalogue_apps_are_reachable(cos_model)
 
 
 def test_deploy_one_robot(cos_model: jubilant.Juju, robot_1_vm: LXDInstance):
 
-    cos_registration_agent_is_available(ros_domain_id=1)
+    assert_cos_registration_agent_is_available(ros_domain_id=1)
     register_device(ros_domain_id=1)
     devices = assert_devices(expected_count=1)
     device_uid = devices[0].get("uid")
@@ -165,7 +165,7 @@ def test_deploy_a_second_robot(
     cos_model: jubilant.Juju, robot_1_vm: LXDInstance, robot_2_vm: LXDInstance
 ):
 
-    cos_registration_agent_is_available(ros_domain_id=2)
+    assert_cos_registration_agent_is_available(ros_domain_id=2)
     register_device(ros_domain_id=2)
     devices = assert_devices(expected_count=2)
 

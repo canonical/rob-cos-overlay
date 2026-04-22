@@ -158,7 +158,7 @@ def blackbox_catalogue_ingress_fix(juju: jubilant.Juju):
     wait_for_active_idle_without_error([juju])
 
 
-def catalogue_apps_are_reachable(
+def assert_catalogue_apps_are_reachable(
     juju: jubilant.Juju, tls_context: Optional[ssl.SSLContext] = None
 ):
     """Assert catalogue apps are reachable from the catalogue unit."""
