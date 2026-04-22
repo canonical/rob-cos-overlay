@@ -68,7 +68,7 @@ jobs:
         juju add-cloud --client --controller concierge-microk8s --file lxd-cloud.yaml
 
         # Done this way to avoid the interactive prompt
-        # Doing it via juju add-credentials requires generating certificates, concatinating them etc.
+        # Doing it via juju add-credentials requires generating certificates, concatenating them etc.
         printf "1\nlxd-local\nQ\n" | juju autoload-credentials --client --controller concierge-microk8s lxd
 
         # Logging the clouds
