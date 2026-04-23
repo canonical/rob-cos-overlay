@@ -19,12 +19,12 @@ provider "juju" {
 # -------------- # Models --------------
 
 data "juju_model" "robcos_model" {
-  uuid     = var.robcos_model_uuid
+  uuid     = var.robcos_model
   provider = juju.robcos
 }
 
 data "juju_model" "microceph_model" {
-  uuid     = var.microceph_model_uuid
+  uuid     = var.microceph_model
   provider = juju.microceph
 }
 
@@ -41,13 +41,13 @@ module "rob_cos" {
 }
 
 module "microceph" {
-  source     = "../microceph"
-  app_name   = "microceph"
-  model_uuid = data.juju_model.microceph_model.uuid
-  channel    = var.microceph.channel
-  revision   = var.microceph.revision
-  units      = var.microceph.units
-  config     = { "enable-rgw" = "*" }
+  source   = "../microceph"
+  app_name = "microceph"
+  model    = data.juju_model.microceph_model.name
+  channel  = var.microceph.channel
+  revision = var.microceph.revision
+  units    = var.microceph.units
+  config   = { "enable-rgw" = "*" }
 
   providers = {
     juju = juju.microceph

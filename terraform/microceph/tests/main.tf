@@ -15,6 +15,6 @@ terraform {
 provider "juju" {}
 
 module "microceph" {
-  model_uuid = data.juju_model.model.uuid
-  source     = "./.."
+  model  = data.juju_model.model.name
+  source = "./.."
 }
