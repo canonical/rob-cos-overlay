@@ -1,0 +1,27 @@
+name: Integration
+
+on:
+  workflow_call:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y tox
+
+    - name: Validate
+      run: |
+        tox -e validate
+
+  integration-tests:
+    needs: validate
+    uses: ./.github/workflows/juju-lxd-setup.yaml
+    with:
+      command: |
+          sudo snap install ros2-cli --channel humble/stable
+          tox -e integration
