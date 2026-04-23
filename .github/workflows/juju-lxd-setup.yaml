@@ -3,6 +3,10 @@ name: Juju LXD Setup
 on:
   workflow_call:
     inputs:
+      checkout_ref:
+        required: false
+        type: string
+        default: ""
       command:
         required: true
         type: string
@@ -12,6 +16,8 @@ jobs:
     runs-on: self-hosted-linux-amd64-noble-2xlarge
     steps:
     - uses: actions/checkout@v6
+      with:
+        ref: ${{ inputs.checkout_ref }}
       # actions/cache cannot be launched as root
       # and /var/lib/snapd/snaps access needs root
     - name: root suid tar

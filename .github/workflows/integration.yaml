@@ -2,12 +2,20 @@ name: Integration
 
 on:
   workflow_call:
+    inputs:
+      checkout_ref:
+        description: Git ref to checkout
+        required: false
+        type: string
+        default: ""
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
+      with:
+        ref: ${{ inputs.checkout_ref }}
 
     - name: Install dependencies
       run: |
@@ -22,6 +30,7 @@ jobs:
     needs: validate
     uses: ./.github/workflows/juju-lxd-setup.yaml
     with:
+      checkout_ref: ${{ inputs.checkout_ref }}
       command: |
           sudo snap install ros2-cli --channel humble/stable
           tox -e integration

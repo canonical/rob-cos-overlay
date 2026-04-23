@@ -2,14 +2,26 @@ name: Terraform
 
 on:
   workflow_call:
+    inputs:
+      checkout_ref:
+        description: Git ref to checkout
+        required: false
+        type: string
+        default: ""
+      run_terraform_docs:
+        description: Run terraform-docs generation and push to PR branch
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   terraform-docs:
+    if: ${{ inputs.run_terraform_docs }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
       with:
-        ref: ${{ github.event.pull_request.head.ref }}
+        ref: ${{ inputs.checkout_ref }}
 
     - name: Render terraform docs and push changes back to PR
       uses: terraform-docs/gh-actions@v1
@@ -23,6 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
+      with:
+        ref: ${{ inputs.checkout_ref }}
 
     - name: Install dependencies
       run: |
@@ -38,4 +52,5 @@ jobs:
     needs: terraform-validate
     uses: ./.github/workflows/juju-lxd-setup.yaml
     with:
+      checkout_ref: ${{ inputs.checkout_ref }}
       command: tox -e terraform-test
