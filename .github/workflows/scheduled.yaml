@@ -1,0 +1,12 @@
+name: Scheduled
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'
+    - cron: '0 0 15 * *'
+
+jobs:
+  pull-request-workflow:
+    uses: ./.github/workflows/pull-request.yaml
+    with:
+      branch: main
