@@ -9,10 +9,21 @@ on:
       - '*.yaml'
     branches:
       - main
+  workflow_call:
+    inputs:
+      branch:
+        description: Branch to run checks against when called as reusable workflow
+        required: true
+        type: string
 
 jobs:
   terraform:
     uses: ./.github/workflows/terraform.yaml
+    with:
+      checkout_ref: ${{ inputs.branch }}
+      run_terraform_docs: ${{ github.event_name == 'pull_request' }}
   integration:
     needs: terraform
     uses: ./.github/workflows/integration.yaml
+    with:
+      checkout_ref: ${{ inputs.branch }}
