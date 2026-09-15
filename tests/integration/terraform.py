@@ -6,7 +6,6 @@ import shlex
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Optional
 
 
 class TfDirManager:
@@ -33,7 +32,7 @@ class TfDirManager:
         subprocess.run(shlex.split(f"{self.tf_cmd} init -upgrade"), check=True)
 
     @staticmethod
-    def _args_str(target: Optional[str] = None, **kwargs) -> str:
+    def _args_str(target: str | None = None, **kwargs) -> str:
         """Return formatted Terraform CLI arguments."""
         target_arg = f"-target module.{target}" if target else ""
         var_args_list = []
@@ -48,7 +47,7 @@ class TfDirManager:
         var_args = " ".join(var_args_list)
         return "-auto-approve " + f"{target_arg} " + var_args
 
-    def apply(self, target: Optional[str] = None, **kwargs):
+    def apply(self, target: str | None = None, **kwargs):
         """Apply the Terraform configuration."""
         cmd_str = f"{self.tf_cmd} apply " + self._args_str(target, **kwargs)
         subprocess.run(shlex.split(cmd_str), check=True)

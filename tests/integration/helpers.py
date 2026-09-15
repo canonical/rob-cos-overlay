@@ -2,12 +2,10 @@
 
 import json
 import logging
-from typing import List
 
 import requests
-from tenacity import retry, stop_after_delay, wait_fixed, before_sleep_log
-
 from ros2 import list_snapd_services, start_snapd_service
+from tenacity import before_sleep_log, retry, stop_after_delay, wait_fixed
 
 COS_SERVER_ADDRESS = "http://10.64.140.43"
 COS_MODEL_NAME = "cos-rob"
@@ -36,7 +34,7 @@ retry_for_10m = retry(
 )
 
 
-def get_cos_registration_server_devices() -> List:
+def get_cos_registration_server_devices() -> list:
     """Return the list of devices from the registration server API."""
     response = requests.get(
         COS_REGISTRATION_SERVER_API_DEVICES,
@@ -171,7 +169,7 @@ def ensure_snapd_service_started(
 
 
 @retry_for_10m
-def assert_devices(*, expected_count: int) -> List:
+def assert_devices(*, expected_count: int) -> list:
     """Wait until the expected number of devices are registered."""
     devices = get_cos_registration_server_devices()
     assert isinstance(devices, list), "Expected devices endpoint to return a list"

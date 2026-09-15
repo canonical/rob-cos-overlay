@@ -1,28 +1,25 @@
-from pathlib import Path
 import json
-
-from helpers import (
-    get_cos_registration_server_devices,
-    alert_group_names,
-    scrape_jobs,
-    assert_with_data,
-    assert_cos_registration_agent_is_available,
-    register_device,
-    delete_device,
-    assert_devices,
-)
-
-from juju import (
-    blackbox_catalogue_ingress_fix,
-    assert_catalogue_apps_are_reachable,
-    wait_for_active_idle_without_error,
-    trigger_update_status,
-    find_application_data,
-)
-
-from craft_providers.lxd.lxd_instance import LXDInstance
+from pathlib import Path
 
 import jubilant
+from craft_providers.lxd.lxd_instance import LXDInstance
+from helpers import (
+    alert_group_names,
+    assert_cos_registration_agent_is_available,
+    assert_devices,
+    assert_with_data,
+    delete_device,
+    get_cos_registration_server_devices,
+    register_device,
+    scrape_jobs,
+)
+from juju import (
+    assert_catalogue_apps_are_reachable,
+    blackbox_catalogue_ingress_fix,
+    find_application_data,
+    trigger_update_status,
+    wait_for_active_idle_without_error,
+)
 
 TRACK_LATEST_TF_FILE = Path(__file__).parent.resolve() / "track-latest.tf"
 
