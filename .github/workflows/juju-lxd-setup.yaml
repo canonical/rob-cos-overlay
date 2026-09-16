@@ -24,7 +24,7 @@ jobs:
       run: sudo chown root:root /bin/tar && sudo chmod u+s /bin/tar
     - name: Cache snaps
       id: cache-snaps
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: /var/lib/snapd/snaps
         key: ${{ runner.os }}-var-lib-snapd-snaps
