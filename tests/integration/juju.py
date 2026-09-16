@@ -5,12 +5,11 @@ import json
 import logging
 import ssl
 import subprocess
+from collections.abc import Generator, Mapping
 from pathlib import Path
-from typing import Generator, List, Optional
 from urllib.request import urlopen
 
 import jubilant
-from collections.abc import Mapping
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +59,7 @@ def temp_named_model(
 
 
 def wait_for_active_idle_without_error(
-    jujus: List[jubilant.Juju], timeout: int = 60 * 45
+    jujus: list[jubilant.Juju], timeout: int = 60 * 45
 ):
     """Wait for models to settle without errors."""
     for juju in jujus:
@@ -88,7 +87,7 @@ def _print_cli_output(juju: jubilant.Juju, *args: str) -> None:
         if output:
             text = str(output)
             print(text, end="" if text.endswith("\n") else "\n")
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         print(f"failed to run `juju {' '.join(args)}`: {exc}")
 
 
@@ -112,7 +111,7 @@ def dump_model_diagnostics(juju: jubilant.Juju) -> None:
                 agent = getattr(unit_status.juju_status, "current", None)
                 if workload != "active" or agent in {"error", "failed"}:
                     units_to_inspect.add(unit_name)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         print(f"failed to inspect status for unit diagnostics: {exc}")
 
     for unit_name in sorted(units_to_inspect):
@@ -122,13 +121,13 @@ def dump_model_diagnostics(juju: jubilant.Juju) -> None:
     print("---- juju debug-log ----")
     try:
         print(juju.debug_log(), end="")
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         print(f"failed to fetch debug log: {exc}")
 
 
 def get_tls_context(
     temp_path: Path, juju: jubilant.Juju, ca_name: str
-) -> Optional[ssl.SSLContext]:
+) -> ssl.SSLContext | None:
     """Return an SSL context from the external CA, if available."""
     if ca_name not in juju.status().apps:
         return None
@@ -159,7 +158,7 @@ def blackbox_catalogue_ingress_fix(juju: jubilant.Juju):
 
 
 def assert_catalogue_apps_are_reachable(
-    juju: jubilant.Juju, tls_context: Optional[ssl.SSLContext] = None
+    juju: jubilant.Juju, tls_context: ssl.SSLContext | None = None
 ):
     """Assert catalogue apps are reachable from the catalogue unit."""
     stdout = juju.ssh("catalogue/0", "cat /web/config.json", container="catalogue")

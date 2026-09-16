@@ -1,10 +1,10 @@
 import contextlib
+import logging
 import tarfile
 import tempfile
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import urlopen
-import logging
 
 from craft_providers.lxd import LXC
 from craft_providers.lxd.lxd_instance import LXDInstance

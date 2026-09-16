@@ -1,19 +1,18 @@
-#!/usr/bin/env python3
 # Copyright 2026 Canonical Ltd.
 # See LICENSE file for licensing details.
 """Conftest file for integration tests."""
 
 import os
 
+import jubilant
 import pytest
-
-from helpers import ros_domain_cloud_init_config
-from terraform import TfDirManager
-from juju import temp_named_model
 from craft_providers.lxd import LXC
 from craft_providers.lxd import is_installed as is_lxd_installed
-from lxd_ubuntu_core import temp_lxd_vm, import_ubuntu_core_image
-import jubilant
+from helpers import ros_domain_cloud_init_config
+from juju import temp_named_model
+from lxd_ubuntu_core import import_ubuntu_core_image, temp_lxd_vm
+
+from terraform import TfDirManager
 
 
 @pytest.fixture(scope="module")
