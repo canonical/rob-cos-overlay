@@ -15,7 +15,7 @@ jobs:
   setup-and-run:
     runs-on: self-hosted-linux-amd64-noble-2xlarge
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
         ref: ${{ inputs.checkout_ref }}
       # actions/cache cannot be launched as root
