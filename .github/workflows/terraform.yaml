@@ -53,4 +53,21 @@ jobs:
     uses: ./.github/workflows/juju-lxd-setup.yaml
     with:
       checkout_ref: ${{ inputs.checkout_ref }}
-      command: tox -e terraform-test
+      command: |
+        set -o pipefail
+        log_file="$(mktemp)"
+
+        tox -e terraform-test 2>&1 | tee "${log_file}"
+        rc=${PIPESTATUS[0]}
+
+        if [ "${rc}" -eq 0 ]; then
+          exit 0
+        fi
+
+        if grep -Eaq "max duration exceeded" "${log_file}"; then
+          echo "::warning::Detected Juju teardown timeout signature; retrying terraform-test once"
+          tox -e terraform-test
+          exit $?
+        fi
+
+        exit "${rc}"
