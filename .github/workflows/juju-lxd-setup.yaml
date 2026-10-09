@@ -36,7 +36,7 @@ jobs:
         sudo snap install terraform --classic
         sudo snap install concierge --classic
         sudo snap install lxd
-        sudo concierge prepare --preset microk8s
+        sudo concierge prepare --preset microk8s --microk8s-channel 1.35-strict
 
     - name: Prepare juju tf provider environment
       run: |
